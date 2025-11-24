@@ -1,0 +1,200 @@
+---
+alwaysApply: true
+---
+
+# StreamTeX Project Rules
+
+## Project Overview
+StreamTeX is a modular Python framework for creating interactive web books with Streamlit. It uses a block-based architecture with a CSS styling system.
+
+## 1. Project Structure and Organization
+
+### Directory Structure
+- Follow the standard StreamTeX project structure:
+  - `book.py` (main entry point)
+  - `blocks/` (content modules)
+  - `custom/` (config.py, styles.py)
+  - `static/images/` (static assets)
+  - `streamtex_package/` (library)
+
+### Import Organization
+- Always start `book.py` with:
+  ```python
+  import streamlit as st
+  import os, sys
+  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+  ```
+- Import blocks individually, not via `import *`
+- Use consistent aliases: `sx` for streamtex, `s` for styles, `t` for tags, `l` for listtypes
+
+## 2. Naming Conventions
+
+### Block Files
+- Use "bck_" prefix for all block files
+- Format: `bck_[description]_[suffix].py`
+- Examples: `bck_welcome_screen_aiai.py`, `bck_title_content.py`
+
+### Classes and Variables
+- `BlockStyles` or `BStyles` for local styles
+- `bs = BlockStyles` for the instance
+- `html_block()` for HTML blocks
+- `build_panel()` for panel blocks
+
+### Custom Styles
+- Use descriptive names: `title_giant_green_01`, `subtitle_blue_01`
+- Prefix custom colors: `green_01`, `blue_dark_01`, `bronze_01`
+
+## 3. Block Code Patterns
+
+### Standard HTML Block Structure
+```python
+import streamlit as st
+from streamtex_package.src.streamtex import *
+from [project].custom.styles import Styles as s
+from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
+
+class BlockStyles:
+    """Local styles for this block only"""
+    # Define block-specific styles
+    pass
+bs = BlockStyles
+
+def html_block():
+    html = ""
+    # Build HTML content
+    return html
+```
+
+### Standard Panel Block Structure
+```python
+def build_panel():
+    html = ""
+    # Use st.markdown, st.image, etc.
+    st.markdown(html, unsafe_allow_html=True)
+```
+
+## 4. Style Management
+
+### Style Hierarchy
+- Use `s.project.*` for project-specific custom styles
+- Use `s.text.*`, `s.container.*` for base styles
+- Create local styles in `BlockStyles` for specific usage
+- Combine styles with `+` operator: `s.bold + s.Large + s.center_txt`
+
+### Custom Style Creation
+- Inherit from `StreamTeX_Styles` in `custom/styles.py`
+- Organize by categories: colors, titles, etc.
+- Use `Style.create()` to combine existing styles
+
+## 5. StreamTeX Functions
+
+### Common st_* Functions
+- `st_write()` for styled text
+- `st_image()` for images with options
+- `st_list()` for ordered/unordered lists
+- `st_grid()` and `st_table()` for layouts
+- `st_space()` for spacing
+- `st_block()` for content encapsulation
+
+### Common Parameters
+- Always specify `style=` for `st_write()`
+- Use `toc_lvl=TOC('level')` for table of contents
+- Use `link=` for hyperlinks
+- Use `tag=` to specify HTML tag
+
+## 6. Path and Asset Management
+
+### Image Paths
+- Use relative paths for images in `static/images/`
+- Avoid absolute paths in code
+- Use `os.path.join()` to build paths
+
+### Path Configuration
+- Define base paths in `config.py`
+- Use `Path()` for modern path manipulation
+- Create directories automatically if needed
+
+## 7. Documentation and Comments
+
+### Block Documentation
+- Include docstring for `html_block()` or `build_panel()`
+- Document function parameters with default values
+- Add comments for complex styles
+
+### Style Documentation
+- Document custom styles in `custom/styles.py`
+- Explain style hierarchy in comments
+- Use descriptive variable names
+
+## 8. Error Handling and Robustness
+
+### Import Management
+- Check module existence before import
+- Use try/except for optional imports
+- Provide clear error messages
+
+### Parameter Validation
+- Check parameter types in functions
+- Provide sensible default values
+- Validate file paths before use
+
+## 9. Performance and Optimization
+
+### Style Optimization
+- Avoid repeated creation of identical styles
+- Use predefined styles instead of inline styles
+- Minimize complex style combinations
+
+### Memory Management
+- Avoid circular imports
+- Use local imports when possible
+- Clean up temporary resources
+
+## 10. Development Conventions
+
+### Code Formatting
+- Use 4 spaces for indentation
+- Limit lines to 100 characters
+- Use snake_case for variable names
+- Use PascalCase for class names
+
+### Version Management
+- Maintain compatibility with previous versions
+- Document breaking changes
+- Use semantic versioning
+
+## 11. StreamTeX Specific Patterns
+
+### Table of Contents
+- Use `TOC('1')` for level 1, `TOC('+1')` for relative levels
+- Always provide meaningful labels
+- Use `toc_lvl` parameter in `st_write()`
+
+### Style Combinations
+- Prefer style composition over inline CSS
+- Use `StyleGrid` for complex layouts
+- Leverage theme system for global style changes
+
+### Block Types
+- HTML blocks: return HTML string from `html_block()`
+- Panel blocks: use Streamlit functions in `build_panel()`
+- Choose based on interactivity needs
+
+## 12. Best Practices
+
+### Code Organization
+- Keep blocks focused and single-purpose
+- Reuse common patterns across blocks
+- Maintain consistent naming throughout project
+
+### Style Consistency
+- Use project color palette consistently
+- Follow typography hierarchy
+- Maintain spacing and layout patterns
+
+### Testing and Validation
+- Test blocks individually
+- Validate HTML output
+- Check responsive behavior
+- Verify accessibility features

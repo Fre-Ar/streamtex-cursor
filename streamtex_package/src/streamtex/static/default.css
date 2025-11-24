@@ -1,0 +1,194 @@
+
+/* styles.css */
+
+.tooltip {
+    position: absolute;
+    display: none;         /* hidden by default */
+    padding: 8px;
+    border: 1px solid #ccc;
+    
+    /* Helps adapt to user color scheme in many modern browsers */
+    color-scheme: light dark;
+    background: Canvas;    
+
+    pointer-events: none;  /* so it doesn't block mouse events */
+    z-index: 9999;         /* ensure on top */
+  }
+
+
+.title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #4CAF50;  /* Green color */
+}
+
+.subtitle {
+    font-size: 36px;
+    font-weight: bold;
+    color: #FF5722;  /* Orange color */
+}
+
+.content {
+    font-size: 24px;
+    color: #000000;  /* Black color */
+}
+
+a {
+    position: relative;
+}
+
+
+.hide-hover-box {
+    display: none;
+  }
+      
+a:hover > .hide-hover-box, .hide-hover-box:hover  {
+    word-wrap: break-word;
+    text-wrap: wrap;
+    display: block;
+    /*margin: -50px;*/
+    border-radius: 6px;
+    padding: 8px;
+    border: 2px solid black;
+    font-size: 16pt;
+    color: royalblue;
+    width: fit-content;
+    position: absolute;
+    left: 100%;
+    z-index: 9999;  
+  }
+
+#root {
+    word-wrap: break-word;
+    text-wrap: wrap;
+}
+
+
+:root {
+    --margs: 0.5;
+    --dpi: 72pt; /*96px*/
+    --page-width: calc(17*var(--dpi));
+  }
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.stMarkdown > * {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.stMainBlockContainer > div > div {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+}
+
+.stMainBlockContainer > div  {
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+
+.stMainBlockContainer {
+    max-width: var(--page-width);
+    transform-origin: 0 0;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* user can’t scroll the page */
+}
+
+.stMain {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* user can’t scroll the page */
+}
+
+.stMainBlockContainer > div > div {
+    flex-direction: row;
+    width: var(--page-width);
+    max-width: var(--page-width);
+    min-width: var(--page-width);
+    overflow: scroll;
+}
+
+.stMainBlockContainer > div > div > div  {     
+    transform-origin: top left;
+    overflow: scroll;
+}
+
+.stMainBlockContainer > div > div   {     
+    transform-origin: top left;
+}
+
+
+
+.stMainBlockContainer > div > div > div > .stElementContainer > * {
+    margin: 0 auto;
+    padding: 0 calc(var(--dpi)*var(--margs));
+}
+
+/*@media (max-width: 1882px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.9);
+    }
+}
+
+
+@media (max-width: 1719px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 1556px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.7);
+    }
+}
+
+@media (max-width: 1393px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.6);
+    }
+}
+
+@media (max-width: 1230px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.5);
+    }
+}
+
+@media (max-width: 1066px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.4);
+    }
+}
+
+@media (max-width: 903px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.3);
+    }
+}
+
+@media (max-width: 740px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.2);
+    }
+}
+
+@media (max-width: 577px) {
+    .stMainBlockContainer > div > div > div  {    
+        transform: scale(0.1);
+    }
+}*/
+
+
+
+
+
+
+
+

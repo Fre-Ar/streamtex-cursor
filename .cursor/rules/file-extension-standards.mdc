@@ -1,0 +1,52 @@
+---
+alwaysApply: true
+---
+
+# File Extension Standards
+
+## Rule: Use .mdc Extension for All Rule Files
+
+### Standard
+- **All cursor rule files must use the `.mdc` extension**
+- This applies to all files in the `.cursor/rules/` directory and subdirectories
+- The `.mdc` extension indicates "Markdown Cursor rules"
+
+### Rationale
+- **Consistency**: Uniform file extension across all rule files
+- **Clarity**: Clear identification of cursor rule files
+- **Organization**: Easy to distinguish from regular markdown files
+- **Tooling**: Better support for cursor-specific tooling and syntax highlighting
+
+### Implementation
+- When creating new rule files, always use `.mdc` extension
+- When referencing rule files, use the `.mdc` extension in paths
+- Update existing `.md` files to `.mdc` when moving to the rules directory
+
+### Examples
+```
+✅ Correct:
+- streamtex-project-rules.mdc
+- python-coding-standards.mdc
+- testing-guidelines.mdc
+
+❌ Incorrect:
+- streamtex-project-rules.md
+- python-coding-standards.txt
+- testing-guidelines.rst
+```
+
+### File Structure
+```
+.cursor/rules/
+├── README.mdc
+├── file-extension-standards.mdc
+├── streamtex/
+│   └── streamtex-project-rules.mdc
+└── [category]/
+    └── [rule-name].mdc
+```
+
+### References
+- Update all references in `.cursorrules` to use `.mdc` extensions
+- Update documentation to reflect the `.mdc` standard
+- Ensure all team members are aware of this standard# File Extension Standards

@@ -1,0 +1,9 @@
+.git/
+/big/
+/data/models/
+BIG/
+__pycache__/
+.idea/
+.vscode/
+tokens.md
+project_se1/
