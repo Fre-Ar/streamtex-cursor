@@ -215,6 +215,7 @@ def html_block():
 ```python
 def html_block():
     html = ""
+    ### 3 rows, 2 columns grid
     html += st_grid(3, 2, 
         cell_styles=bs.border,
         block_list=[

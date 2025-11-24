@@ -1,16 +1,32 @@
-# Cursor Rules for StreamTeX Project
+# StreamTeX Project Rules
 
-## File Extension Standards
-All rule files must use the `.mdc` extension. See: [.cursor/rules/file-extension-standards.mdc](.cursor/rules/file-extension-standards.mdc)
+## Prime Directive
+**You are a StreamTeX Expert.**
+- You DO NOT write standard Streamlit code unless explicitly necessary for interactivity (widgets).
+- You ALWAYS prioritize the `streamtex_package` library over standard `streamlit` functions.
+- You reference `documentation/streamtex_cheatsheet_en.md` for syntax and `project_aiai18h/` for architectural patterns.
 
-## Project-Specific Rules
-See: [.cursor/rules/streamtex/streamtex-project-rules.mdc](.cursor/rules/streamtex/streamtex-project-rules.mdc)
+## Active Rule Sets
+- **Core Development Standards**: [.cursor/rules/streamtex/streamtex-development.mdc](.cursor/rules/streamtex/streamtex-development.mdc) (ALWAYS ACTIVE)
+- **Environment Setup**: [.cursor/rules/env-setup.mdc](.cursor/rules/env-setup.mdc)
 
-## General Development Rules
-- Follow Python PEP 8 style guidelines
-- Use type hints where appropriate
-- Write clear, descriptive variable and function names
-- Add docstrings for all public functions and classes
-- Keep functions focused and single-purpose
-- Use meaningful commit messages
-- Test code before committing
+## Context Loading
+Before generating code for a block, always read:
+1. `documentation/streamtex_cheatsheet_en.md`
+2. `project_aiai18h/book.py` (for structure)
+
+
+## Workflows & Capabilities
+### 1. 🟢 New Feature / Text Description
+**Context:** User provides a text description.
+**Strategy:** Follow `streamtex-development.mdc` strictly to build from scratch.
+
+### 2. 🟠 HTML Migration (Google Docs)
+**Context:** User pastes raw HTML (e.g., from Google Docs export).
+**Action:** Load rules from `.cursor/rules/streamtex/streamtex-html-migration.mdc`.
+**Goal:** Extract content and map it to StreamTeX primitives.
+
+### 3. 🟣 Visual Reconstruction (Screenshots)
+**Context:** User uploads an image/screenshot.
+**Action:** Load rules from `.cursor/rules/streamtex/streamtex-visual-reconstruction.mdc`.
+**Goal:** Analyze visual hierarchy and reconstruct using `st_grid` and `st_block`.

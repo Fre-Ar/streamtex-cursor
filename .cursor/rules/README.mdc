@@ -1,45 +1,16 @@
 ---
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Cursor Rules Organization
 
-This directory contains organized cursor rules for different aspects of the project.
+This directory contains the rules that guide the Cursor AI agent.
 
 ## Structure
-
-```
-.cursor/rules/
-├── README.mdc (this file)
-├── file-extension-standards.mdc
-├── streamtex/
-│   └── streamtex-project-rules.mdc
-└── [future-categories]/
-    └── [specific-rule-files].mdc
-```
-
-## Usage
-
-The main `.cursorrules` file references these specific rule files using relative paths. This allows for:
-
-- **Modularity**: Each category of rules is in its own file
-- **Maintainability**: Easy to update specific rule sets without affecting others
-- **Scalability**: Easy to add new rule categories as the project grows
-- **Clarity**: Clear separation of concerns between different types of rules
+- **streamtex/streamtex-development.mdc**: The core logic for writing StreamTeX code. Defines imports, block structures, and styling rules.
+- **env-setup.mdc**: Instructions on how to run the project (Conda, Streamlit commands).
+- **file-extension-standards.mdc**: (Optional) Meta-rules about naming files.
 
 ## Adding New Rules
-
-1. Create a new subdirectory for your rule category (e.g., `python/`, `testing/`, `deployment/`)
-2. Add your rule files with descriptive names
-3. Update the main `.cursorrules` file to reference the new rules
-4. Update this README to document the new category
-
-## Current Categories
-
-- **streamtex/**: Project-specific rules for the StreamTeX framework
-  - `streamtex-project-rules.mdc`: Complete set of StreamTeX development guidelines
-
-## File Extension Standards
-
-- **All rule files must use the `.mdc` extension**
-- See: [file-extension-standards.mdc](file-extension-standards.mdc) for details
+1. Create a `.mdc` file in the appropriate subdirectory.
+2. Reference it in the main `.cursorrules` file in the project root if it should be active.
