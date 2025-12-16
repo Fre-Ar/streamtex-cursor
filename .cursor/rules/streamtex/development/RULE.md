@@ -20,6 +20,7 @@ StreamTeX is a wrapper around Streamlit with a block-based architecture. You are
   - `custom/` (config.py, styles.py)
   - `static/images/` (static assets)
   - `streamtex_package/` (library)
+  - `.streamlit/config.toml` (streamlit configuration, **critical** for static image serving)
 
 ## 3. Mandatory Imports
 
@@ -57,7 +58,7 @@ Use `sx` functions for **ALL** layout and static content.
 - **Text:** Use `sx.st_write(style, txt=...)` instead of `st.write` or `st.markdown`.
 - **Images:** Use `sx.st_image(style, uri=...)` instead of `st.image`.
 - **Lists:** Use `sx.st_list()` instead of manual markdown lists.
-- **Layouts:** Use `sx.st_grid()` or `sx.st_table()` instead of `st.columns`. The first two parameters of `sx.st_grid()` are `rows, columns`.
+- **Layouts:** Use `sx.st_grid(rows, cols, ...)` or `sx.st_table()` instead of `st.columns`.
 - **Content Encapsulation:** Use `st_block()`.
 - **Spacing:** Use `sx.st_space()` or `sx.st_br()`.
 
@@ -66,6 +67,11 @@ Use `sx` functions for **ALL** layout and static content.
 - Use `toc_lvl=TOC('level')` for table of contents
 - Use `link=` for hyperlinks
 - Use `tag=` to specify HTML tag
+
+#### Layout & Encapsulation Rules (`st_block`)
+
+  - **Vertical Stacking (Default):** Use `sx.st_block(..., tag=t.div)` when you want elements to stack on top of each other. This is the default behavior.
+  - **Horizontal Flow:** Use `sx.st_block(..., tag=t.span)` when you want elements to flow inline (side-by-side), similar to text spans.
 
 ### When to use Streamlit (`st`)
 
@@ -128,6 +134,21 @@ def build_panel():
 - **Project Styles:** Use `s.project.*` for project-specific custom styles
 - **Composition:** Combine styles using the `+` operator: `s.bold + s.red + s.Large + s.center_txt`.
 - **Definition:** Define styles in `BlockStyles` class within the file or `custom/styles.py`.
+- **Text Font and Sizes:** 
+  - **Default:** The default font is **Arial**. The default unstyled size is **16px** (approx. **12pt**).
+  - **Available Sizes:** `s.text.sizes` (often aliased directly as `s.large`, `s.huge`, etc.) provides the following scale:
+    - **Titles:** `GIANT` (196pt), `Giant` (128pt), `giant` (112pt), `Huge` (96pt), `huge` (80pt).
+    - **Headers:** `LARGE` (64pt), `Large` (48pt), `large` (32pt).
+    - **Body/Sub:** `big` (24pt), `medium` (16pt), `little` (12pt/Default), `small` (8pt), `tiny` (4pt).
+  - **Usage:** Ensure title-to-body ratios are balanced.
+- **Typography Details (Bold & Italic)** 
+  - **Detection:** Be keenly aware of weight and emphasis.
+    - **Bold:** Apply `s.bold` if the text carries visual weight or acts as a sub-header.
+    - **Italic:** Apply `s.italic` for citations, emphasis, or captions.
+  - **Defaults:** Remember that links (`link=...`) are underlined and blue by default. Use `no_link_decor=True` if the design shows a plain link.
+- **Light vs. Dark Mode Awareness:** Do not hardcode black or white unless it is an explicit design choice (e.g., a specific "card" background). 
+  - **Implicit Colors:** If text is black on a white background (or vice versa), this is usually the *default theme*, not a style. **Do NOT** explicitly style it as `color: black`. Let Streamlit handle the Light/Dark mode switch.
+  - **Explicit Colors:** Only define `color` or `background-color` if it is a branding color (Red, Blue, specialized Gray) that must remain constant regardless of the theme.
 
 ### Custom Style Creation
 - Inherit from `StreamTeX_Styles` in `custom/styles.py`

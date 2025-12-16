@@ -1,7 +1,6 @@
 ---
 alwaysApply: true
 ---
-
 # Environment & Execution
 
 ## Shell Configuration
@@ -19,5 +18,5 @@ streamlit run book.py
 ```
 
 ## Dependencies
-- If import errors occur, check `requirements.txt` in the root or `streamtex_package/`.
+- If import errors occur, check `streamtex_package/requirements.txt`.
 - Ensure `streamtex_package` is located in the parent directory of your project folder.

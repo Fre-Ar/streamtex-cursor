@@ -130,6 +130,35 @@ body {
     padding: 0 calc(var(--dpi)*var(--margs));
 }
 
+
+/* --- Streamlit Header Modifications --- */
+
+/* 1. Make the header transparent and let mouse clicks pass through it */
+header[data-testid="stHeader"] {
+    background-color: transparent !important;
+    pointer-events: none; /* This is the key: allows you to click "through" the header */
+}
+
+/* 2. Re-enable mouse interactions specifically for the buttons (Sidebar toggle, Menu) */
+header[data-testid="stHeader"] button[title="View fullscreen"], 
+header[data-testid="stHeader"] button[kind="header"] {
+    pointer-events: auto; 
+    
+    /* Optional: Add a subtle background to buttons so they are easier to see */
+    background-color: rgba(255, 255, 255, 0.5); 
+    border-radius: 4px;
+    margin: 4px;
+}
+
+/* Target the specific sidebar toggle button if standard selectors fail */
+[data-testid="stSidebarCollapsedControl"] {
+    pointer-events: auto;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+
+
 /*@media (max-width: 1882px) {
     .stMainBlockContainer > div > div > div  {    
         transform: scale(0.9);

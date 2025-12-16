@@ -12,5 +12,5 @@ This directory contains the rules that guide the Cursor AI agent.
 - **file-extension-standards.mdc**: (Optional) Meta-rules about naming files.
 
 ## Adding New Rules
-1. Create a `.mdc` file in the appropriate subdirectory.
+1. Create a `RULE.md` file in the appropriate subdirectory.
 2. Reference it in the main `.cursorrules` file in the project root if it should be active.
