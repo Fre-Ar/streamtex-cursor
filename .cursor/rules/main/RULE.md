@@ -27,8 +27,13 @@ Before generating code for a block, always read:
 
 ### 2. 🟠 HTML Migration (Google Docs)
 **Context:** User pastes raw HTML (e.g., from Google Docs export).
-**Action:** Load rules from `.cursor/rules/streamtex/html-migration/RULE.md`.
-**Goal:** Extract content and map it to StreamTeX primitives.
+**Action:** 
+- Load rules from `.cursor/rules/streamtex/html-migration/RULE.md`.
+- **When working in this repository, use `project_html_example/` as the canonical example of a completed migration**, where:
+  - The source HTML is `html_exports/bck_showcase_music/bck_showcase_music.html`.
+  - The resulting block is `project_html_example/blocks/bck_showcase_music.py`.
+  - The migrated assets live in `project_html_example/static/images/`.
+**Goal:** Extract content and map it to StreamTeX primitives, mirroring the patterns used in `bck_showcase_music.py` (style consolidation, image naming, helper functions for repeated link patterns).
 
 ### 3. 🟣 Visual Reconstruction (Screenshots)
 **Context:** User uploads an image/screenshot.

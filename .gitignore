@@ -7,7 +7,9 @@ __pycache__/
 .vscode/
 tokens.md
 project_se1/
-html_exports/
 project_gai4as/
-
+project_ai4se/
 *.DS_Store
+*.png
+*.jpg
+*.html

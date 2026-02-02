@@ -407,7 +407,7 @@ class Decors:
 
 class Weights:
     # Font weights
-    bold_weight        = Style("font-weight: bold;",   "bold_weight")
+    bold_weight        = Style("font-weight: bold;",   "bold_weight") # font-weight: 700
     light_weight       = Style("font-weight: 300;",    "light_weight")
     normal_weight      = Style("font-weight: normal;", "normal_weight")
 
@@ -879,7 +879,7 @@ class Paddings:
         converted_sizes = []
         for size in sizes[:4]:
             if isinstance(size, int):
-                size = f"{size}em"
+                size = f"{size}pt"
             converted_sizes.append(str(size))
 
         padding_value = " ".join(converted_sizes)
@@ -889,35 +889,63 @@ class Paddings:
             style_id = f"padding_{padding_value.replace(' ', '_')}"
 
         return Style(f"padding: {padding_value};", style_id)
+    
+    # Padding (pt)
+    Giant_padding   = Style("padding: 96pt;",  "Giant_padding")
+    """96pt"""
+    giant_padding   = Style("padding: 84pt;",  "giant_padding")
+    """84pt"""
+    Huge_padding    = Style("padding: 72pt;",  "Huge_padding")
+    """72pt"""
+    huge_padding    = Style("padding: 60pt;",  "huge_padding")
+    """60pt"""
+    LARGE_padding   = Style("padding: 48pt;",  "LARGE_padding")
+    """48pt"""
+    Large_padding   = Style("padding: 36pt;",  "Large_padding")
+    """36pt"""
+    large_padding   = Style("padding: 24pt;",  "large_padding")
+    """24pt"""
+    big_padding     = Style("padding: 18pt;",  "big_padding")
+    """18pt"""
+    medium_padding  = Style("padding: 12pt;",  "medium_padding")
+    """12pt"""
+    little_padding  = Style("padding: 9pt;",   "little_padding")
+    """9pt"""
+    small_padding   = Style("padding: 6pt;",   "small_padding")
+    """6pt"""
+    tiny_padding    = Style("padding: 3pt;",   "tiny_padding")
+    """3pt"""
+    none_padding    = Style("padding: 0pt;",   "none_padding")
+    """0pt"""
 
-    # Padding
-    Giant_padding   = Style("padding: 8em;",   "Giant_padding")
+    # Padding (em)
+    Giant_em_padding   = Style("padding: 8em;",   "Giant_em_padding")
     """8em"""
-    giant_padding   = Style("padding: 7em;",   "giant_padding")
+    giant_em_padding   = Style("padding: 7em;",   "giant_em_padding")
     """7em"""
-    Huge_padding    = Style("padding: 6em;",   "Huge_padding")
+    Huge_em_padding    = Style("padding: 6em;",   "Huge_em_padding")
     """6em"""
-    huge_padding    = Style("padding: 5em;",   "huge_padding")
+    huge_em_padding    = Style("padding: 5em;",   "huge_em_padding")
     """5em"""
-    LARGE_padding   = Style("padding: 4em;",   "LARGE_padding")
+    LARGE_em_padding   = Style("padding: 4em;",   "LARGE_em_padding")
     """4em"""
-    Large_padding   = Style("padding: 3em;",   "Large_padding")
+    Large_em_padding   = Style("padding: 3em;",   "Large_em_padding")
     """3em"""
-    large_padding   = Style("padding: 2em;",   "large_padding")
+    large_em_padding   = Style("padding: 2em;",   "large_em_padding")
     """2em"""
-    big_padding     = Style("padding: 1.5em;", "big_padding")
+    big_em_padding     = Style("padding: 1.5em;", "big_em_padding")
     """1.5em"""
-    medium_padding  = Style("padding: 1em;",   "medium_padding")
+    medium_em_padding  = Style("padding: 1em;",   "medium_em_padding")
     """1em"""
-    little_padding  = Style("padding: 0.75em;","little_padding")
+    little_em_padding  = Style("padding: 0.75em;","little_em_padding")
     """0.75em"""
-    small_padding   = Style("padding: 0.5em;", "small_padding")
+    small_em_padding   = Style("padding: 0.5em;", "small_em_padding")
     """0.5em"""
-    tiny_padding    = Style("padding: 0.25em;","tiny_padding")
+    tiny_em_padding    = Style("padding: 0.25em;","tiny_em_padding")
     """0.25em"""
-    none_padding    = Style("padding: 0px;",   "none_padding")
-
-
+    none_em_padding    = Style("padding: 0em;",   "none_em_padding")
+    """0em"""
+    
 class Margins:
 
     @staticmethod
@@ -937,7 +965,7 @@ class Margins:
         converted_sizes = []
         for size in sizes[:4]:
             if isinstance(size, int):
-                size = f"{size}em"
+                size = f"{size}pt"
             converted_sizes.append(str(size))
 
         margin_value = " ".join(converted_sizes)
@@ -948,33 +976,65 @@ class Margins:
 
         return Style(f"margin: {margin_value};", style_id)
 
-    # Margin
-    Giant_margin    = Style("margin: 8em;",   "Giant_margin")
-    """8em"""
-    giant_margin    = Style("margin: 7em;",   "giant_margin")
-    """7em"""
-    Huge_margin     = Style("margin: 6em;",   "Huge_margin")
-    """6em"""
-    huge_margin     = Style("margin: 5em;",   "huge_margin")
-    """5em"""
-    LARGE_margin    = Style("margin: 4em;",   "LARGE_margin")
-    """4em"""
-    Large_margin    = Style("margin: 3em;",   "Large_margin")
-    """3em"""
-    large_margin    = Style("margin: 2em;",   "large_margin")
-    """2em"""
-    big_margin      = Style("margin: 1.5em;", "big_margin")
-    """1.5em"""
-    medium_margin   = Style("margin: 1em;",   "medium_margin")
-    """1em"""
-    little_margin   = Style("margin: 0.75em;","little_margin")
-    """0.75em"""
-    small_margin    = Style("margin: 0.5em;", "small_margin")
-    """0.5em"""
-    tiny_margin     = Style("margin: 0.25em;","tiny_margin")
-    """0.25em"""
-    none_margin     = Style("margin: 0px;",   "none_margin")
+    # Margin (pt)
+    Giant_margin    = Style("margin: 96pt;",  "Giant_margin")
+    """96pt"""
+    giant_margin    = Style("margin: 84pt;",  "giant_margin")
+    """84pt"""
+    Huge_margin     = Style("margin: 72pt;",  "Huge_margin")
+    """72pt"""
+    huge_margin     = Style("margin: 60pt;",  "huge_margin")
+    """60pt"""
+    LARGE_margin    = Style("margin: 48pt;",  "LARGE_margin")
+    """48pt"""
+    Large_margin    = Style("margin: 36pt;",  "Large_margin")
+    """36pt"""
+    large_margin    = Style("margin: 24pt;",  "large_margin")
+    """24pt"""
+    big_margin      = Style("margin: 18pt;",  "big_margin")
+    """18pt"""
+    medium_margin   = Style("margin: 12pt;",  "medium_margin")
+    """12pt"""
+    little_margin   = Style("margin: 9pt;",   "little_margin")
+    """9pt"""
+    small_margin    = Style("margin: 6pt;",   "small_margin")
+    """6pt"""
+    tiny_margin     = Style("margin: 3pt;",   "tiny_margin")
+    """3pt"""
+    none_margin     = Style("margin: 0pt;",   "none_margin")
+    """0pt"""
+    
+    # Special Margin
     auto_margin     = Style("margin: auto;",  "auto_margin")
+    
+    # Margin (em)
+    Giant_em_margin    = Style("margin: 8em;",   "Giant_em_margin")
+    """8em"""
+    giant_em_margin    = Style("margin: 7em;",   "giant_em_margin")
+    """7em"""
+    Huge_em_margin     = Style("margin: 6em;",   "Huge_em_margin")
+    """6em"""
+    huge_em_margin     = Style("margin: 5em;",   "huge_em_margin")
+    """5em"""
+    LARGE_em_margin    = Style("margin: 4em;",   "LARGE_em_margin")
+    """4em"""
+    Large_em_margin    = Style("margin: 3em;",   "Large_em_margin")
+    """3em"""
+    large_em_margin    = Style("margin: 2em;",   "large_em_margin")
+    """2em"""
+    big_em_margin      = Style("margin: 1.5em;","big_em_margin")
+    """1.5em"""
+    medium_em_margin   = Style("margin: 1em;",   "medium_em_margin")
+    """1em"""
+    little_em_margin   = Style("margin: 0.75em;","little_em_margin")
+    """0.75em"""
+    small_em_margin    = Style("margin: 0.5em;", "small_em_margin")
+    """0.5em"""
+    tiny_em_margin     = Style("margin: 0.25em;","tiny_em_margin")
+    """0.25em"""
+    none_em_margin     = Style("margin: 0em;",   "none_em_margin")
+    """0em"""
+
 
 
 class Layouts:
@@ -1016,7 +1076,7 @@ class Borders:
         converted_sizes = []
         for size in sizes[:4]:
             if isinstance(size, int):
-                size = f"{size}em"
+                size = f"{size}pt"
             converted_sizes.append(str(size))
 
         border_width_value = " ".join(converted_sizes)
