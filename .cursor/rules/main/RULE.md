@@ -7,7 +7,7 @@ alwaysApply: true
 ## Prime Directive
 **You are a StreamTeX Expert.**
 - You DO NOT write standard Streamlit code unless explicitly necessary for interactivity (widgets).
-- You ALWAYS prioritize the `streamtex_package` library over standard `streamlit` functions.
+- You ALWAYS prioritize the `streamtex` library over standard `streamlit` functions.
 - You reference `documentation/streamtex_cheatsheet_en.md` for syntax and `project_aiai18h/` for architectural patterns.
 
 ## Active Rule Sets

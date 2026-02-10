@@ -1,5 +1,4 @@
-from streamtex_package.src.streamtex.styles import StreamTeX_Styles, Style, Text, Container
-
+from streamtex.styles import Style, Text, Container, StreamTeX_Styles
 
 class ColorsCustom:
     """Custom colors defined multiple times."""

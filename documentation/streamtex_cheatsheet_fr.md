@@ -1,20 +1,21 @@
-# 📚 Streamtex Complete Cheatsheet
+# 📚 Aide-mémoire Complet Streamtex
 
-## 📥 Imports Essentiels
+## 📥 Importations Essentielles
 
 ```python
-from streamtex_package.src.streamtex import *
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
+from streamtex import *
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
+
 ```
 
 ## 🎨 Organisation des Styles
 
-### Classe de Styles Personnalisés
+### Classe de Style Personnalisée
 
 ```python
 class BlockStyles:
-    """Custom styles defined locally and used only for this block"""
+    """Styles personnalisés définis localement et utilisés uniquement pour ce bloc"""
     # Styles composés
     content = s.Large + s.center_txt
     lime_bold = s.text.colors.lime + s.bold
@@ -28,9 +29,10 @@ class BlockStyles:
              s.container.borders.solid_border + \
              s.container.borders.size("2px")
     
-    # Styles avec padding
+    # Styles avec padding (remplissage)
     side_padding = ns("padding: 10pt 36pt;")
 bs = BlockStyles
+
 ```
 
 ## 📝 Éléments de Base
@@ -39,22 +41,19 @@ bs = BlockStyles
 
 ```python
 # Bloc simple avec style
-html += st_block(s.center_txt, [
-    st_write(bs.green_title, "Mon Titre"),
+with st_block(s.center_txt):
+    st_write(bs.green_title, "Mon Titre")
     st_space(size=3)
-])
 
 # Bloc avec liste
-html += st_block(s.center_txt, [
-    st_list(
+with st_block(s.center_txt):
+    with st_list(
         list_type=l.ordered,
-        li_style=bs.content,
-        block_list=[
-            st_write(txt="Premier élément"),
-            st_write(txt="Second élément")
-        ]
-    )
-])
+        li_style=bs.content) as l:
+        with l.item(): st_write("Premier élément")
+        with l.item(): st_write("Deuxième élément")
+
+
 ```
 
 ### Images et Médias
@@ -67,36 +66,45 @@ st_image(uri="image.png")
 st_image(uri="image.png", width="1150px", height="735.34px")
 
 # Image avec lien
-st_image(uri="image.png", link="https://example.com")
+st_image(uri="image.png", link="[https://example.com](https://example.com)")
 
-# Image avec style auto-height
+# Image avec style hauteur automatique
 st_image(s.container.sizes.height_auto, uri="image.png")
+
 ```
 
 ### Grilles et Tableaux
 
 ```python
-# Grille 3x2
-html += st_grid(3, 2, 
-    cell_styles=bs.border + s.container.paddings.little_padding,
-    block_list=[
-        st_image(uri="image1.png"),
-        st_image(uri="image2.png"),
-        st_image(uri="image3.png")
-    ]
-)
+# Grille à 2 colonnes de largeur égale
+with st_grid(
+    cols=2, 
+    cell_styles=bs.border + s.container.paddings.little_padding
+    ) as g:
+    # rangée 1
+    with g.cell(): st_image(uri="image1.png")
+    with g.cell(): st_image(uri="image2.png")
+    # rangée 2
+    with g.cell(): st_image(uri="image3.png")
 
-# Tableau avec styles personnalisés
-html += st_table(
+
+# Grille (tableau) avec styles de grille personnalisés
+with st_grid(
+    cols=2, 
     cell_styles=sg.create("A1,A3", s.project.colors.orange_02) +
                 sg.create("A2", s.project.colors.red_01) +
-                sg.create("A1:B3", s.bold + s.LARGE),
-    block_list=[
-        ["Titre", "Lien"],
-        ["Item 1", "lien1"],
-        ["Item 2", "lien2"]
-    ]
-)
+                sg.create("A1:B3", s.bold + s.LARGE)
+    ) as g:
+    # rangée 1
+    with g.cell(): st_write("Titre")
+    with g.cell(): st_write("Lien")
+    # rangée 2
+    with g.cell(): st_write("Élément 1")
+    with g.cell(): st_write("lien1")
+    # rangée 3
+    with g.cell(): st_write("Élément 2")
+    with g.cell(): st_write("lien2")
+
 ```
 
 ## 🔗 Liens et Navigation
@@ -105,21 +113,23 @@ html += st_table(
 
 ```python
 # Lien simple
-st_write(txt="Cliquez ici", link="https://example.com")
+st_write("Cliquez ici", link="[https://example.com](https://example.com)")
 
 # Lien stylisé
 link_style = s.text.colors.blue + s.text.decors.underline_text
-st_write(link_style, txt="Lien stylisé", link="https://example.com", no_link_decor=True)
+st_write(link_style, "Lien stylisé", link="[https://example.com](https://example.com)", no_link_decor=True)
+
 ```
 
 ### Table des Matières
 
 ```python
-# Niveau principal
-st_write(style, "Section", toc_lvl=TOC("1"))
+# Niveau supérieur
+st_write(style, "Section", toc_lvl="1")
 
 # Sous-niveau
-st_write(style, "Sous-section", toc_lvl=TOC("+1"))
+st_write(style, "Sous-section", toc_lvl="+1")
+
 ```
 
 ## 🎯 Styles Prédéfinis
@@ -134,9 +144,10 @@ s.project.colors.orange_01
 s.project.colors.red_01
 s.project.colors.brown_01
 
-# Couleurs de texte
+# Couleurs du texte
 s.text.colors.lime
 s.text.colors.black
+
 ```
 
 ### Tailles de Texte
@@ -146,14 +157,16 @@ s.huge          # Très grand
 s.LARGE         # Plus grand
 s.Large         # Grand
 s.large         # Normal
+
 ```
 
-### Alignements et Mise en Page
+### Alignement et Mise en page
 
 ```python
 s.center_txt
 s.container.flex.center_align_items
 s.container.layouts.vertical_center_layout
+
 ```
 
 ### Décorations
@@ -162,6 +175,7 @@ s.container.layouts.vertical_center_layout
 s.bold
 s.italic
 s.text.decors.underline_text
+
 ```
 
 ## 🔧 Utilitaires
@@ -178,18 +192,20 @@ st_space("h", size=1)
 
 # Saut de ligne
 st_br()
+
 ```
 
 ### Conteneurs
 
 ```python
-# Padding
+# Padding (Remplissage)
 s.container.paddings.little_padding
 s.container.paddings.small_padding
 
 # Bordures
 s.container.borders.solid_border
 s.container.borders.size("2px")
+
 ```
 
 ## 💡 Exemples Complets
@@ -197,96 +213,80 @@ s.container.borders.size("2px")
 ### Page de Documentation
 
 ```python
-def html_block():
-    html = ""
-    html += st_block(bs.center_txt, [
-        st_write(bs.green_title, "Documentation"),
-        st_space(size=3),
-        st_list(l.ordered, bs.content, [
-            "Premier point",
-            "Second point"
-        ])
-    ])
-    return html
+def build():
+    with st_block(bs.center_txt):
+        st_write(bs.green_title, "Documentation")
+        st_space(size=3)
+        with st_list(l.ordered, bs.content) as l:
+            with l.item(): st_write("Premier point")
+            with l.item(): st_write("Deuxième point")
+
 ```
 
-### Showcase avec Grille
+### Vitrine avec Grille
 
 ```python
-def html_block():
-    html = ""
-    html += st_grid(3, 2, 
-        cell_styles=bs.border,
-        block_list=[
-            st_image(uri="image1.png"),
-            st_image(uri="image2.png"),
-            st_write(bs.content, "Description")
-        ]
-    )
-    return html
+def build():
+    ### Grille à 2 colonnes
+    st_grid(
+        cols=2, 
+        cell_styles=bs.border) as g:
+        with g.cell(): st_image(uri="image1.png")
+        with g.cell(): st_image(uri="image2.png")
+        with g.cell(): st_write(bs.content, "Description")
+
 ```
 
 ### Exemple de Page Complète
 
 ```python
-def html_block():
-    html = ""
-
+def build():
     # En-tête avec titre
-    html += st_block(s.center_txt + s.LARGE + s.bold, [
-        st_write(s.project.colors.blue_01 + s.huge, "Titre Principal", toc_lvl=TOC("1")),
-        st_space(size=2),
-        st_write(s.project.colors.orange_01, "Sous-titre", toc_lvl=TOC("+1")),
+    with st_block(s.center_txt + s.LARGE + s.bold):
+        st_write(s.project.colors.blue_01 + s.huge, "Titre Principal", toc_lvl="1")
+        st_space(size=2)
+        st_write(s.project.colors.orange_01, "Sous-titre", toc_lvl="+1")
         st_space(size=3)
-    ])
 
     # Contenu principal
-    html += st_block(s.center_txt, [
-        st_list(
+    with st_block(s.center_txt):
+        with st_list(
             list_type=l.ordered,
-            li_style=bs.content,
-            block_list=[
-                st_write(txt="Section 1"),
-                st_write(txt="Section 2"),
-                st_write(txt="Section 3")
-            ]
-        )
-    ])
+            li_style=bs.content) as l:
+            with l.item(): st_write("Section 1")
+            with l.item(): st_write("Section 2")
+            with l.item(): st_write("Section 3")
 
     # Grille d'images
-    html += st_grid(2, 2,
-        cell_styles=bs.border + s.container.paddings.little_padding,
-        block_list=[
-            st_image(uri="image1.png"),
-            st_image(uri="image2.png"),
-            st_write(bs.content, "Description 1"),
-            st_write(bs.content, "Description 2")
-        ]
-    )
+    st_grid(
+        cols=2,
+        cell_styles=bs.border + s.container.paddings.little_padding) as g:
+            with g.cell(): st_image(uri="image1.png")
+            with g.cell(): st_image(uri="image2.png")
+            with g.cell(): st_write(bs.content, "Description 1")
+            with g.cell(): st_write(bs.content, "Description 2")
 
     # Liens et références
-    html += st_block(s.center_txt + s.Large, [
-        st_write(bs.link_style, txt="Lien 1", link="https://example1.com"),
-        st_space(size=1),
-        st_write(bs.link_style, txt="Lien 2", link="https://example2.com")
-    ])
+    with st_block(s.center_txt + s.Large):
+        st_write(bs.link_style, "Lien 1", link="[https://example1.com](https://example1.com)")
+        st_space(size=1)
+        st_write(bs.link_style, "Lien 2", link="[https://example2.com](https://example2.com)")
 
     return html
+
 ```
 
 ## 📌 Notes Importantes
 
-1. Toujours initialiser le HTML avec `html = ""`
-2. Utiliser les classes de style pour organiser le code
-3. Combiner les styles avec l'opérateur `+`
-4. Utiliser `st_space()` pour gérer les espacements
-5. Penser à la hiérarchie des titres pour la table des matières
+1. Utilisez des classes de style pour organiser le code.
+2. Combinez les styles avec l'opérateur `+`.
+3. Utilisez `st_space()` pour gérer l'espacement.
+4. Gardez une hiérarchie de titres appropriée pour la table des matières.
 
-## 🔍 Astuces et Bonnes Pratiques
+## 🔍 Conseils et Bonnes Pratiques
 
-1. Regrouper les styles communs dans une classe `BlockStyles`
-2. Utiliser des variables pour les styles réutilisés
-3. Commenter les sections complexes
-4. Structurer le code en sections logiques
-5. Utiliser les espaces verticaux pour améliorer la lisibilité
-
+1. Regroupez les styles communs dans une classe `BlockStyles`.
+2. Utilisez des variables pour les styles réutilisables.
+3. Commentez les sections complexes.
+4. Structurez le code en sections logiques.
+5. Utilisez l'espacement vertical pour améliorer la lisibilité.

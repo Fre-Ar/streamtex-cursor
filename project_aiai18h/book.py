@@ -1,90 +1,58 @@
 import streamlit as st 
-
-import os, sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-import project_aiai18h.blocks
-import project_aiai18h.blocks.bck_image_break_frog_orange
-import project_aiai18h.blocks.bck_image_dog_02_practice
-import project_aiai18h.blocks.bck_image_dog_sherlock
-import project_aiai18h.blocks.bck_image_go_practice
-import project_aiai18h.blocks.bck_image_two_racoons_01
-import project_aiai18h.blocks.bck_image_welcome_back_giraffe_01
-import project_aiai18h.blocks.bck_it_computers_ai_users
-import project_aiai18h.blocks.bck_participants_round_table_aiai
-import project_aiai18h.blocks.bck_practice_course_pack_access
-import project_aiai18h.blocks.bck_showcase_aiai_content
-import project_aiai18h.blocks.bck_showcase_glimpse_aiai
-import project_aiai18h.blocks.bck_showcase_image_recognition_mnist_intro_aiai
-import project_aiai18h.blocks.bck_showcase_text_generation
-import project_aiai18h.blocks.bck_title_bravo
-import project_aiai18h.blocks.bck_title_break
-import project_aiai18h.blocks.bck_title_content
-import project_aiai18h.blocks.bck_trainer_ng
-import project_aiai18h.blocks.bck_training_title_aiai_dlh
-import project_aiai18h.blocks.bck_welcome_screen_aiai
-import project_aiai18h.blocks.bck_domains_terms_aiai
-import project_aiai18h.blocks.bck_game_your_profile
-import project_aiai18h.blocks.bck_content_aiai_all
-import project_aiai18h.blocks.bck_session_01_course_docs
-import project_aiai18h.blocks.bck_setting_up_notebooks_aiai
+import setup
+from streamtex import st_book, TOCConfig
+import blocks
+from custom.styles import Styles as s
+from custom.themes import dark
+import streamtex.styles as sts
 
 
 
-
-st.set_page_config(page_title="AIAI",
+st.set_page_config(page_title="StreamTeX 1.53.0 Test Book",
                     page_icon=None,
-                    layout="centered",
-                    initial_sidebar_state="expanded",
+                    layout="wide",
+                    initial_sidebar_state="collapsed",
                     menu_items=None)
 
-import streamtex_package.src.streamtex as sx
-import project_aiai18h.custom.config as cfg
+toc = TOCConfig(
+    numerate_titles=False,
+    toc_position=0,
+    title_style=s.project.titles.title_giant_green_01 + s.center_txt + s.text.wrap.nowrap,
+    content_style=s.large + s.text.colors.reset)
 
+sts.theme = dark
 
-
-# Define the root path for the blocks folder
-blocks_root_path = os.getcwd() + "/project_aiai18h/blocks"
-path_python_folder = os.path.join(blocks_root_path, "py")
-sys.path.append(path_python_folder)
-
-
-
-
-
-st.sidebar.title("Table of Contents")
-
-
-module_list = [
-    project_aiai18h.blocks.bck_welcome_screen_aiai,
-    project_aiai18h.blocks.bck_training_title_aiai_dlh,
-    project_aiai18h.blocks.bck_showcase_glimpse_aiai,
-    project_aiai18h.blocks.bck_trainer_ng,
-    project_aiai18h.blocks.bck_participants_round_table_aiai,
-    project_aiai18h.blocks.bck_domains_terms_aiai,
-    project_aiai18h.blocks.bck_it_computers_ai_users,
-    project_aiai18h.blocks.bck_title_content,
-    project_aiai18h.blocks.bck_image_dog_sherlock,
-    project_aiai18h.blocks.bck_content_aiai_all,
-    project_aiai18h.blocks.bck_session_01_course_docs,
-    project_aiai18h.blocks.bck_image_dog_02_practice,
-    project_aiai18h.blocks.bck_practice_course_pack_access,
-    project_aiai18h.blocks.bck_game_your_profile,
-    project_aiai18h.blocks.bck_setting_up_notebooks_aiai,
-    project_aiai18h.blocks.bck_image_go_practice,
-    project_aiai18h.blocks.bck_title_bravo,
-    project_aiai18h.blocks.bck_image_two_racoons_01,
-    project_aiai18h.blocks.bck_title_break,
-    project_aiai18h.blocks.bck_image_break_frog_orange,
-    project_aiai18h.blocks.bck_image_welcome_back_giraffe_01,
-    project_aiai18h.blocks.bck_showcase_aiai_content,
-    project_aiai18h.blocks.bck_showcase_text_generation,
-    project_aiai18h.blocks.bck_showcase_image_recognition_mnist_intro_aiai
-]
+st_book([
+    blocks.bck_welcome_screen_aiai,
+    blocks.bck_training_title_aiai_dlh,
+    blocks.bck_showcase_glimpse_aiai,
+    blocks.bck_trainer_ng,
+    blocks.bck_participants_round_table_aiai,
+    blocks.bck_domains_terms_aiai,
+    blocks.bck_it_computers_ai_users,
+    blocks.bck_title_content,
+    blocks.bck_image_dog_sherlock,
+    blocks.bck_content_aiai_all,
+    blocks.bck_session_01_course_docs,
+    blocks.bck_image_dog_02_practice,
+    blocks.bck_practice_course_pack_access,
+    blocks.bck_game_your_profile,
+    blocks.bck_setting_up_notebooks_aiai,
+    blocks.bck_image_go_practice,
+    blocks.bck_title_bravo,
+    blocks.bck_image_two_racoons_01,
+    blocks.bck_title_break,
+    blocks.bck_image_break_frog_orange,
+    blocks.bck_image_welcome_back_giraffe_01,
+    blocks.bck_showcase_aiai_content,
+    blocks.bck_showcase_text_generation,
+    blocks.bck_showcase_image_recognition_mnist_intro_aiai
+    
+], toc_config=toc)
 
 
 
 
-sx.st_book(module_list)
+
 
 

@@ -1,13 +1,12 @@
 import streamlit as st
 
-# StreamTeX Imports
-from streamtex_package.src.streamtex import *
-import streamtex_package.src.streamtex as sx
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
+# StreamTeX Block Imports
+from streamtex import *
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
 
 # Project Specific Imports
-from project_html_example.custom.styles import Styles as s
+from custom.styles import Styles as s
 
 
 # URLs used in this block
@@ -132,6 +131,11 @@ class BlockStyles:
     # simpler style:
     cell_style = cell_border + s.center_txt
     
+    # Additionally, st_grid uses underlying different primitive tags than a <table>.
+    # Thus, whenever translating a <table> into a st_grid,
+    # the cell_styles must always include `s.container.layouts.vertical_center_layout`
+    # to make sure the content inside the table cells are vertically centered.
+    cell_style = cell_border + s.center_txt + s.container.layouts.vertical_center_layout
     
     # After all of this thought process and evaluation, what we should expect the BlockStyles to look like is:
     
@@ -148,7 +152,7 @@ class BlockStyles:
     
     style_fixed_table = Style("table-layout: fixed; width: 100%; border-collapse: collapse;")
     # combining cell_border into cell_style since it is never used independently
-    cell_style = s.container.borders.solid_border + s.container.paddings.small_padding + s.center_txt
+    cell_style = s.container.borders.solid_border + s.container.paddings.small_padding + s.center_txt  + s.container.layouts.vertical_center_layout
     
     
     
@@ -158,91 +162,52 @@ class BlockStyles:
 bs = BlockStyles
 
 
-def html_block():
+def build():
     """Show AI music exemplars with artwork, descriptions, and listening links."""
-    html = ""
-    
-    html += sx.st_block(
-        s.center_txt, 
-        [
-            sx.st_write(bs.title, "Music", toc_lvl=TOC("1"))
-        ]
-    )
+    with st_block(s.center_txt):
+        st_write(bs.title, "Music", toc_lvl="1")
     
     # Constructs the st_block for the "_" links.
     def link_row(urls):
-        link_blocks = [sx.st_write(bs.link_style, "_", link=urls[0])]
+        tuples = [(bs.link_style, "_", urls[0])]
         for i in range(1, len(urls)):
-            link_blocks.append(sx.st_write(txt=" "))
-            link_blocks.append(sx.st_write(bs.link_style, "_", link=urls[i]))
-        return sx.st_block(
-                    bs.annotation_text,
-                    link_blocks,
-                    tag=t.span
-                )
+            tuples.append(" ")
+            tuples.append((bs.link_style, "_", urls[i]))
+        st_write(bs.annotation_text, *tuples)
     
-    table_cells = [
-        sx.st_image(uri="bck_showcase_music_image_002.png",
-                    width  = "302.61px",
-                    height = "378.50px"
-        ),
-        sx.st_block(
-            style=s.little,
-            block_list=[ 
-                sx.st_write(bs.primary_link, "by MuseNet", link=MUSENET_TRACK),
-                sx.st_block(
-                    bs.italic_bold,
-                    [
-                        sx.st_write(txt="("),
-                        sx.st_write(bs.link_style, "MuseNet", link=MUSENET_RESEARCH),
-                        sx.st_write(txt=" music published on SoundCloud)"),
-                    ],
-                )
-            ],
-        ),
-        sx.st_image(uri="bck_showcase_music_image_001.jpg",
-                    width  = "245.67px",
-                    height = "388.00px"
-        ),
-        sx.st_block(
-            style=s.little,
-            block_list=[ 
-                sx.st_write(bs.primary_link, "JukeBox", link=JUKEBOX_FEATURE),
-                sx.st_br(),
-                sx.st_write(bs.primary_text, "with voice generation"),
-                sx.st_br(),
-                link_row(JUKEBOX_SAMPLE_LINKS)
-            ]
-        ),
-        sx.st_image(uri="bck_showcase_music_image_003.png",
-                    width  = "258.62px",
-                    height = "350.00px"
-        ),
-        sx.st_block(
-            style=s.little,
-            block_list=[ 
-                sx.st_write(bs.primary_link, "Suno", link=SUNO_FEATURE),
-                sx.st_br(),
-                sx.st_write(bs.primary_text, "with voice generation"),
-                sx.st_br(),
-                link_row(SUNO_SAMPLE_LINKS)
-            ]
-        )
-    ]
-    
-    html += sx.st_table(
-                3,
-                2,
-                table_style=bs.style_fixed_table,
-                cell_styles= bs.cell_style,
-                block_list=table_cells,
+    # Table
+    with st_grid(
+        cols=2,
+        grid_style=bs.style_fixed_table,
+        cell_styles= bs.cell_style) as g:
+        # Row 1
+        with g.cell(): 
+            st_image(uri="bck_showcase_music_image_002.png",
+                     width  = "302.61px",
+                     height = "378.50px")
+        with g.cell():
+            with st_block(s.little):
+                st_write(bs.primary_link, "by MuseNet", link=MUSENET_TRACK)
+                st_write(bs.italic_bold,
+                    "(", (bs.link_style, "MuseNet", MUSENET_RESEARCH)," music published on SoundCloud)")
+        # Row 2
+        with g.cell():
+            st_image(uri="bck_showcase_music_image_001.jpg",
+                     width  = "245.67px",
+                     height = "388.00px"
             )
-    
-
-    
-
-
-
-
-    return html
-
+        with g.cell():
+            with st_block(s.little):
+                st_write(bs.primary_link, "JukeBox", link=JUKEBOX_FEATURE)
+                st_write(bs.primary_text, "with voice generation")
+                link_row(JUKEBOX_SAMPLE_LINKS)
+        # Row 3
+        with g.cell():
+            st_image(uri="bck_showcase_music_image_003.png",
+                    width  = "258.62px",
+                    height = "350.00px")
+        with g.cell():
+            with st_block(s.little):
+                st_write(bs.primary_link, "Suno", link=SUNO_FEATURE)
+                st_write(bs.primary_text, "with voice generation")
+                link_row(SUNO_SAMPLE_LINKS)

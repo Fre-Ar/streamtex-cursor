@@ -16,10 +16,12 @@ StreamTeX is a wrapper around Streamlit with a block-based architecture. You are
 ### Directory Structure
 - Follow the standard StreamTeX project structure:
   - `book.py` (main entry point)
+  - `setup.py`(sets up PATH)
   - `blocks/` (content modules)
-  - `custom/` (config.py, styles.py)
+  - `blocks/__init__.py` (sets up block access)
+  - `custom/` (themes.py, styles.py)
   - `static/images/` (static assets)
-  - `streamtex_package/` (library)
+  - `streamtex/` (library)
   - `.streamlit/config.toml` (streamlit configuration, **critical** for static image serving)
 
 ## 3. Mandatory Imports
@@ -30,24 +32,27 @@ Every block file must start with this setup:
 import streamlit as st
 
 # StreamTeX Imports
-from streamtex_package.src.streamtex import *
-import streamtex_package.src.streamtex as sx
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
+from streamtex import *
+import streamtex as sx
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
 
 # Project Specific Imports
-from [project_name].custom.styles import Styles as s
+from custom.styles import Styles as s
 ```
 
 ### B. For the Entry Point (`book.py` ONLY)
-- This file MUST handle the path setup.
+- This file MUST import `setup.py` to handle the PATH setup.
 ```python
 import streamlit as st
-import os, sys
-# Ensure parent directory is in path for streamtex_package access
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import setup
 ```
-- Import blocks individually, not via `import *`
+- one may access blocks as such:
+```python
+import blocks
+
+blocks.bck_name
+```
 
 ## 4. Coding Standards: `sx` vs `st`
 
@@ -55,23 +60,22 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 Use `sx` functions for **ALL** layout and static content.
 
-- **Text:** Use `sx.st_write(style, txt=...)` instead of `st.write` or `st.markdown`.
+- **Text:** Use `sx.st_write(style, ...)` instead of `st.write` or `st.markdown`.
 - **Images:** Use `sx.st_image(style, uri=...)` instead of `st.image`.
 - **Lists:** Use `sx.st_list()` instead of manual markdown lists.
-- **Layouts:** Use `sx.st_grid(rows, cols, ...)` or `sx.st_table()` instead of `st.columns`.
-- **Content Encapsulation:** Use `st_block()`.
+- **Layouts:** Use `sx.st_grid(cols, ...)` instead of `st.columns`.
+- **Content Encapsulation:** Use `st_block()`, sometimes `st_span()`.
 - **Spacing:** Use `sx.st_space()` or `sx.st_br()`.
 
 #### Common Parameters
 - Always specify `style=` for `st_write()`
-- Use `toc_lvl=TOC('level')` for table of contents
+- Use `toc_lvl='level'` for table of contents
 - Use `link=` for hyperlinks
 - Use `tag=` to specify HTML tag
 
 #### Layout & Encapsulation Rules (`st_block`)
-
-  - **Vertical Stacking (Default):** Use `sx.st_block(..., tag=t.div)` when you want elements to stack on top of each other. This is the default behavior.
-  - **Horizontal Flow:** Use `sx.st_block(..., tag=t.span)` when you want elements to flow inline (side-by-side), similar to text spans.
+- **Vertical Stacking (Default):** Use `with sx.st_block(...):` when you want elements to stack on top of each other. This is the default behavior.
+- **Horizontal Flow:** Use `with sx.st_span(...):` when you want elements to flow inline (side-by-side), similar to text spans. Only use this if the content isn't wide enough to wrap around.
 
 ### When to use Streamlit (`st`)
 
@@ -79,22 +83,21 @@ Only use standard `st` functions for:
 
 - Interactivity (Buttons, Inputs, Sliders).
 - Media players (Audio/Video) if `sx` lacks a wrapper.
-- Dataframes (if `sx.st_table` is insufficient).
+- Dataframes.
+- When explicitely asked to use it.
 
 ## 5. Block Architecture
 
-### HTML Blocks (`html_block`)
-
-Use this for static content. It must return a string.
+### StreamTeX Blocks (`build`)
+It must contain a ```build()``` function.
 
 ```python
 import streamlit as st
-
-from streamtex_package.src.streamtex import *
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
-
-from [project_name].custom.styles import Styles as s
+from streamtex import *
+import streamtex as sx
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
+from custom.styles import Styles as s
 
 class BlockStyles:
     """Local styles for this block only"""
@@ -102,30 +105,16 @@ class BlockStyles:
     pass
 bs = BlockStyles
 
-def html_block():
-    html = ""
-    html += sx.st_block(s.center_txt, [
+def build():
+    with sx.st_block(s.center_txt):
         sx.st_write(s.title, "Hello World")
-    ])
-    return html
 ```
 
-### Panel Blocks (`build_panel`)
-
-Use this *only* when interactivity is required. It returns a callable or renders directly.
-
-```python
-def build_panel():
-    # Use standard st elements here if necessary, mixed with sx helpers
-    if st.button("Click me"):
-        st.write("Clicked")
-```
 
 ## 6. Project Structure
 
 - **Filenames:** `blocks/bck_[description]_[suffix].py`. Examples: `bck_welcome_screen_aiai.py`, `bck_title_content.py`.
-- **Assets:** Store images in `static/images/`. Refer to them using relative paths or filenames directly if configured in `config.py`. Use `os.path.join()` to build paths.
-- **Path Configuration:** Define base paths in `config.py`. Use `Path()` for modern path manipulation. Use `os.path.join()` to build paths. Create directories automatically if needed.
+- **Assets:** Store images in `static/images/`. Refer to them using relative paths. Use `os.path.join()` to build custom paths if needed.
 
 ## 7. Styling Guidelines
 
@@ -161,17 +150,16 @@ def build_panel():
 - **Avoid Duplication:** Do not differentiate styles by ID if they have exactly the same definition.
 
 ### Visual Considerations
-- **Dark Mode:** Ensure your style definitions are dark mode friendly (e.g., avoid pure black text on transparent backgrounds if the default theme is dark).
+- **Dark Mode:** Ensure your style definitions are dark mode friendly (e.g., avoid pure black text on transparent backgrounds if the default theme is dark). If needed, add theme variants in ```custom/themes.py```.
 - **Alignment:** Be keenly aware of centered styles and text alignment.
-- **Precision Layout:** Always insert line breaks (`st_br()` function call) to match the provided text layout exactly.  
+- **Precision Layout:** Always insert line breaks to match the provided text layout exactly.  
 
 ## 8. Variable Naming Conventions
 
 ### Classes and Variables
 - `BlockStyles` or `BStyles` for local styles
 - `bs = BlockStyles` for the instance
-- `html_block()` for HTML blocks
-- `build_panel()` for panel blocks
+- `build()` for blocks
 
 ### Custom Styles
 - Use descriptive names: `title_giant_green_01`, `subtitle_blue_01`
@@ -181,7 +169,7 @@ def build_panel():
 ## 9. Documentation and Comments
 
 ### Block Documentation
-- Include docstring for `html_block()` or `build_panel()`
+- Include docstring for `build()`
 - Document function parameters with default values
 - Add comments for complex styles
 
@@ -213,7 +201,7 @@ def build_panel():
 ## 12. StreamTeX Specific Patterns
 
 ### Table of Contents
-- Use `TOC('1')` for level 1, `TOC('+1')` for relative levels
+- Use `'1'` for level 1, `'+1'`/`'-1'` for relative levels
 - Always provide meaningful labels
 - Use `toc_lvl` parameter in `st_write()`
 

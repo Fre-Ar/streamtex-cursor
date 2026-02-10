@@ -18,5 +18,5 @@ streamlit run book.py
 ```
 
 ## Dependencies
-- If import errors occur, check `streamtex_package/requirements.txt`.
-- Ensure `streamtex_package` is located in the parent directory of your project folder.
+- If import errors occur, check `requirements.txt`.
+- Ensure the `streamtex` folder is located in the parent directory of your project folder.

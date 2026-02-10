@@ -17,9 +17,9 @@ Before coding, analyze the images to distinguish between structure, layout, colo
 
 ### A. Layout & Grid Detection
 - **Horizontal Split:** If elements are side-by-side, use `sx.st_grid()`.
-    - *Estimate Ratios:* 1/3 Image + 2/3 Text = `sx.st_grid(cols=3, …)`.
-- **Inline Elements:** If blocks sit side-by-side in a single line, use `sx.st_block(..., tag=t.span)`.
-- **Stacked Elements:** Default behavior `tag=t.div`.
+    - *Estimate Ratios:* 1/3 Image + 2/3 Text = `sx.st_grid(cols="1fr 2fr", …)`.
+- **Inline Elements:** If blocks sit side-by-side in a single line, use `sx.st_span(...)`.
+- **Stacked Elements:** Default behavior `st_block()`.
 - **Vertical Rhythm:** Identify the main sections (Hero, Content, Footer).
 
 ### B. Typography & Hierarchy
@@ -59,13 +59,13 @@ If the screenshot contains images, illustrations, or icons and logos (identified
 
 ### B. Multiple Image Inputs
 - If provided with multiple screenshots (e.g., a scrolling capture split into parts), you must create a **single block** that includes ALL elements from ALL images in their correct sequence.
-- Do not create separate blocks unless explicitly asked. Merge the visual flow into one continuous `html_block` function.
+- Do not create separate blocks unless explicitly asked. Merge the visual flow into one continuous `build()` function.
 
 ### C. Text Layout & Coloring
 - **Line Breaks:** Use `sx.st_br()` to force line breaks exactly where they appear in the image to preserve the visual shape of the text.
 - **Multi-Colored Text:** You must replicate text coloring with high precision.
     - *Example:* If "Artificial Intelligence" is Blue but "A" and "I" are Red.
-    - **Implementation:** Do NOT simplify this to a single color. Use a span container with multiple `sx.st_write` calls (one for "A", one for "rtificial", etc.) or appropriate StreamTeX composition tools to achieve the exact visual result.
+    - **Implementation:** Do NOT simplify this to a single color. Use a `sx.st_write` call with multiple `(style, txt)` tuples as its parameters (one for "A", one for "rtificial", etc.) or appropriate StreamTeX composition tools to achieve the exact visual result.
 
 ### D. Iterative Styling
 - Define `BlockStyles` first.
@@ -78,6 +78,6 @@ If the screenshot contains images, illustrations, or icons and logos (identified
 - [ ] Are image URIs named correctly (e.g., `..._image_001.png`)?
 - [ ] Does the block contain the full sequence from all provided screenshots?
 - [ ] Is vertical spacing respected using `st_space`?
-- [ ] - [ ] Are line breaks (`st_br`) used to match the text flow?
+- [ ] Are line breaks (`st_br`) used to match the text flow?
 - [ ] Are generic styles defined in `BlockStyles`?
 - [ ] Is the code free of inline CSS strings?

@@ -1,8 +1,8 @@
 import streamlit as st
-from streamtex_package.src.streamtex import *
-from project_aiai18h.custom.styles import Styles as s
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
+from streamtex import *
+from custom.styles import Styles as s
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
 
 class BlockStyles:
     """Custom styles defined locally and used only for this block"""
@@ -19,41 +19,45 @@ class BlockStyles:
     purple_subtitle = s.project.colors.purple_02 + content + s.bold
 bs = BlockStyles
 
-def html_block():
-    html = ""
+def build():
 
-    temp_text_01 = f"USE {st_write(bs.gold, 'YOUR')} VALUES(S) PRINTED ON PAPER"
-    temp_text_02 = {st_write(s.bold, f"{st_write(s.LARGE, 'YOUR')} {st_write(bs.green, 'gmail email address')} {st_write(bs.pink, temp_text_01)}")}
+    with st_block(bs.center_txt):
+        st_write(bs.huge_green_title + bs.center_txt + s.bold, 
+                 "Practice - CoursePack Access", 
+                 toc_lvl='2')
+        st_space(size=5)
 
-    html += st_block(bs.center_txt, [
-        st_write(bs.huge_green_title + bs.center_txt + s.bold,
-                 "Practice - CoursePack Access",
-                 toc_lvl=TOC('2')),
-        st_space(size=5),
+        st_write(bs.center_txt + bs.blue + s.bold + s.huge, 
+                 "Process", 
+                 toc_lvl='+1')
+        st_space(size=5)
 
-        st_write(bs.center_txt + bs.blue + s.bold + s.huge, "Process", toc_lvl=TOC('+1')),
-        st_space(size=5),
-
-        st_write(bs.purple_subtitle, "Please proceed to the following process:"),
-        st_space(size=3),
-        st_list(
-            list_type=l.ordered,
-            li_style= bs.content,
-            block_list=[
-                st_write(txt="Start your computer (if not started)"),
-                st_write(txt="Open a session using the institution identification information (if not already opened)"),
-                st_write(txt="Launch firefox application"),
-                st_write(txt=f"Go to {st_write(bs.link_style, 'aiai.ros.lu', link='https://aiai.ros.lu')}"),
-               #  st_write(txt=f'Click on {st_write(bs.red_emphasis, '"Go"')}'),
-                st_write(txt=f"""Click on {st_write(bs.red_emphasis, '"Go"')}"""),
-                # st_write(txt=f"Fill the form with {st_write(s.bold, f"{st_write(s.LARGE, 'YOUR')} {st_write(bs.green, 'gmail email address')} {st_write(bs.pink, f"USE {st_write(bs.gold, "YOUR")} VALUES(S) PRINTED ON PAPER")}")}"),
-                st_write(txt=f"Fill the form with {temp_text_02}"),
-                st_write(txt=f"Check your email at {st_write(bs.link_style, 'mail.google.com', link='https://mail.google.com')}"),
-                st_write(txt=f"Click on the {st_write(bs.gold + s.LARGE + s.bold, 'COURSEPACK')} link")
-            ]
-        )
-    ])
-
-    return html
+        st_write(bs.purple_subtitle, "Please proceed to the following process:")
+        st_space(size=3)
+        
+        with st_list(lt.ordered, li_style=bs.content + s.container.layouts.center) as l:
+            
+            with l.item(): st_write("Start your computer (if not started)")
+            with l.item(): st_write("Open a session using the institution identification information (if not already opened)")
+            with l.item(): st_write("Launch firefox application")
+            
+            with l.item(): 
+                st_write("Go to ", (bs.link_style, "aiai.ros.lu", 'https://aiai.ros.lu'))
+            with l.item():
+                st_write("Click on ", (bs.red_emphasis, '"Go"'))
+            
+            with l.item(s.bold):
+                st_write("Fill the form with ", 
+                         (s.LARGE, "YOUR "),
+                         (bs.green, "gmail email address "),
+                         (bs.pink, "USE "), 
+                         (bs.gold, "YOUR "), 
+                         (bs.pink, "VALUES(S) PRINTED ON PAPER"))
+            
+            with l.item():
+                st_write("Check your email at ", (bs.link_style, "mail.google.com", 'https://mail.google.com'))
+                
+            with l.item():
+                st_write("Click on the ", (bs.gold + s.LARGE + s.bold, "COURSEPACK"), " link")
 
 

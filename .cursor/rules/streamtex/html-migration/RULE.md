@@ -25,19 +25,22 @@ Before implementing a new migration, you SHOULD:
   - How links and repeated patterns (e.g., link rows) were factored into helper functions.
 
 ## 2. Analysis Phase (Internal Monologue)
-1.  **Filter Noise:** Ignore non-descriptive classes (`c1`, `c12`). Look at the *computed* style (e.g., bold, centered, blue).
+1.  **Filter Noise:** Ignore non-descriptive class names (`c1`, `c12`). Look at the *computed* styles (e.g., bold, centered, blue) of those classes.
 2.  **Identify Defaults:**
     - Is the text or grid backgrounds just black/white? **Do not** apply a color style (allow Light/Dark mode). 
     - Is the link underlined? That is default behavior; do not add extra decoration styles or set `no_link_decor=True` (keep it as the default `False`).
 3.  **Detect Formatting:**
     - Identify **Bold** (`font-weight: 700`) and *Italic* (`font-style: italic`) usage. Map these to `s.bold` and `s.italic`.
 4.  **Identify Containers:**
-    - Invisible tables used for alignment -> Map to `sx.st_grid()`.
-    - Actual data tables -> Map to `sx.st_table()`.
+    - Tables used for alignment or data (e.g. `<table>`) -> Map to `sx.st_grid()`.
     - Manual bullet points -> Map to `sx.st_list()`.
 5.  **Style Consolidation:**
     - Identify repeating patterns (e.g., "11pt Arial Black").
     - Create **ONE** generic style in `BlockStyles` (e.g., `s.text.header_standard`) instead of copying `c1`, `c2`, `c3`.
+6.  **Identify Colors:**
+    - Is every color used in the html defined and used in the block?
+    - Is every part of the page colored the appropriate way? 
+    - Double check every div and html class to make sure.
 
 ## 3. Implementation Steps
 
@@ -52,13 +55,14 @@ If the HTML contains images (`<img>` tags), you MUST rename them using the proje
 1.  **Setup:** Create file with Mandatory Imports from `.cursor/rules/streamtex/development/RULE.md`.
 2.  **Styles:** Define consolidated `BlockStyles` class.
     - *Constraint:* Do not use IDs for style differentiation if definitions are identical.
-3.  **Structure:** Write `html_block()`.
-    - Use `tag=t.span` for inline elements.
-    - Use `tag=t.div` for stacked blocks.
+3.  **Structure:** Write `build()`.
+    - Use `sx.st_block()` for stacked blocks.
+    - Use `sx.st_write(style, (sub_style, txt), txt, ...)` for inline text of different styles.
+    - Use `sx.st_span()` for other inline elements.
 
 **Reference pattern:** In `project_html_example/blocks/bck_showcase_music.py`, notice how:
-- Raw HTML table layout became a combination of `sx.st_table` with `cell_styles` and `sx.st_block` for cell content.
-- Repeated inline link sequences were abstracted into a small helper (`link_row`) that returns an `sx.st_block(..., tag=t.span)`.
+- Raw HTML table layout became a combination of `sx.st_grid` with `cell_styles` (noticeably using the `s.container.layouts.vertical_center_layout` cell style) and `sx.st_block` for cell content.
+- Repeated inline link sequences were abstracted into a small helper (`link_row`) that constructs arguments for a `st_write()` call.
 
 ### C. Content Extraction
 1.  **Text:** Extract clean text. Replace `<br>` with `sx.st_br()`.
@@ -72,6 +76,8 @@ When unsure how to represent a particular HTML construct, **first look for the c
 - [ ] Did I rename all image assets to `..._image_001.[ext]`?
 - [ ] Did I use `sx.st_list` instead of hardcoded bullets?
 - [ ] Did I use `sx.st_br()` for line breaks to match the layout?
+- [ ] Did I use `sx.st_grid()` with `cell_styles` containing `s.container.layouts.vertical_center_layout` to match `<table>` layouts?
 - [ ] Did I remove hardcoded black/white colors to support Dark Mode?
 - [ ] Did I correctly apply `s.bold` and `s.italic` where needed?
+- [ ] Did I include and properly use all custom colors?
 

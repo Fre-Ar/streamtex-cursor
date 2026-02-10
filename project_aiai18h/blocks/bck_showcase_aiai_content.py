@@ -1,9 +1,8 @@
 import streamlit as st
-from streamtex_package.src.streamtex import *
-from project_aiai18h.custom.styles import Styles as s
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
-
+from streamtex import *
+from custom.styles import Styles as s
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
 
 class BlockStyles:
     """Custom styles defined locally and used only for this block"""
@@ -13,26 +12,15 @@ class BlockStyles:
 bs = BlockStyles
 
 
-def html_block():
+def build():
 
-    html = ""
+    st_write(bs.green_huge_title, "Showcase", toc_lvl="2", tag=t.div)
+    st_space(size=5)
 
-    html += st_write(bs.green_huge_title, "Showcase", toc_lvl=TOC("2"), tag=t.div)
-    html += st_space(size=5)
-
-
-    html += st_list(
-            list_type=l.unordered,
-            li_style=s.Large + s.center_txt,
-            block_list=[
-                st_write(txt="Text Generation"),
-                st_write(txt="Image Recognition"),
-                st_write(txt="Image Generation"),
-                st_write(txt="Music Generation"),
-                st_write(bs.debriefing_style, "Debriefing"),
-            ]
-        )
-        
-    return html
-
+    with st_list(lt.unordered, li_style=s.Large + s.container.layouts.center) as l:
+        with l.item(): st_write("Text Generation")
+        with l.item(): st_write("Image Recognition")
+        with l.item(): st_write("Image Generation")
+        with l.item(): st_write("Music Generation")
+        with l.item(bs.debriefing_style): st_write("Debriefing")
 

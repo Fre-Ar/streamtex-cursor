@@ -9,7 +9,14 @@ tokens.md
 project_se1/
 project_gai4as/
 project_ai4se/
+template_project_old/
 *.DS_Store
-*.png
-*.jpg
-*.html
+html_exports/bck_game_your_profile/
+html_exports/bck_showcase_text_generation_all/
+html_exports/bck_trainer_ng/
+html_exports/bck_training_title_aiai_dlh/
+html_exports/bck_showcase_glimpse_aiai/
+test.html
+project_html_example/blocks/bck_showcase_text_generation_all
+streamtex_legacy/
+

@@ -1,4 +1,0 @@
-streamlit==1.41.0
-beautifulsoup4>=4.10.0
-google-api-python-client>=2.155.0
-huggingface_hub

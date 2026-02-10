@@ -1,4 +1,4 @@
-from streamtex_package.src.streamtex.styles import Style, Text, Container, StreamTeX_Styles
+from streamtex.styles import Style, Text, Container, StreamTeX_Styles
 
 
 class ColorsCustom:

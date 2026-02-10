@@ -1,8 +1,8 @@
 import streamlit as st
-from streamtex_package.src.streamtex import *
-from project_aiai18h.custom.styles import Styles as s
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
+from streamtex import *
+from custom.styles import Styles as s
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
 
 data = [
     ["Order", "TaskCategory", "TaskDescription", "HR", "EST"],
@@ -17,34 +17,32 @@ data = [
     ["9", "Documentation", "Write the terminology in your report.", "AF", "3.0"]
 ]
 
-
-def html_block():
-
-    class BStyles:
+class BStyles:
          center_txt = s.text.alignments.center_align
          bold = s.text.weights.bold_weight
-    bs = BStyles
+bs = BStyles
 
-    html = ""
-    #html += st_write(txt="Hello World", toc_lvl=TOC('-3'), label='Hello Link')
+def build():
 
-    html += st_block(bs.center_txt, [
-         st_write(s.text.colors.green + s.text.sizes.huge_size + bs.center_txt + bs.bold,
+    with st_block(bs.center_txt):
+        st_write(s.text.colors.green + s.text.sizes.huge_size + bs.center_txt + bs.bold,
                     "Game - Your Profile", tag=t.h2,
-                    toc_lvl=TOC('2')),
-         st_image(uri = "goats_01.png"),
-         st_grid(1, 2,
-                s.text.sizes.Large_size + ns("background-color: beige;"),
-                s.text.alignments.center_align + bs.bold,
-            [
-                st_write(s.project.colors.bronze_01, "Jeu - présentation individuelle"),
-                st_write(s.project.colors.red_01, f"Click HERE & {st_br()} RightClick & {st_write('Open!')}",
-                          link="https://docs.google.com/forms/d/e/1FAIpQLScl5M6-u2lykUAxh_DRZAxuIvUewTSOUTNmpMBOpzvJ-AbvvA/viewform")
-            ]),
-        st_write(s.text.decors.italic_text + s.text.sizes.large_size + bs.center_txt, "(Check the 'end of game link' to see the results)")
-    ])
-
-
+                    toc_lvl='2') 
+        st_image(uri = "goats_01.png")
+        
+        with st_grid(2,
+            grid_style=s.text.sizes.Large_size + ns("background-color: #ead1dc;") + s.container.margins.size("0", "36pt") + s.container.sizes.width_auto,
+            cell_styles=s.text.alignments.center_align + bs.bold) as g:
+            with g.cell():
+                st_write(s.project.colors.bronze_01, "Jeu - présentation individuelle")
+            with g.cell():
+                st_write(s.project.colors.blue_01, "Click HERE & RightClick & ",
+                        (s.project.colors.red_01, "Open!"),
+                        link="https://docs.google.com/forms/d/e/1FAIpQLScl5M6-u2lykUAxh_DRZAxuIvUewTSOUTNmpMBOpzvJ-AbvvA/viewform")
+        
+        st_write(s.text.decors.italic_text + s.text.sizes.large_size + bs.center_txt,
+                 "(Check the 'end of game link' to see the results)")
+    
     #html += st_sheet("https://docs.google.com/spreadsheets/d/1_NZyEhhMQXAwew2mwJcu-oeBtNzW0PPFi2PcnVOOsFg/edit?usp=sharing",
     #                 os.path.join(cfg.documents_path,"sheet_key.json"),
     #                 "Sheet1!A1:E10",
@@ -56,6 +54,3 @@ def html_block():
 
    # html += st_table(cell_styles=sg.create("A1:E10", s.text.sizes.large_size) * sg.create("A1:C10, E10", s.text.colors.white_color + s.container.bg_colors.red_bg_color) ,
     #                block_list=data)
-
-        
-    return html

@@ -1,9 +1,8 @@
 import streamlit as st
-from streamtex_package.src.streamtex import *
-from project_aiai18h.custom.styles import Styles as s
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
-
+from streamtex import *
+from custom.styles import Styles as s
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
 
 class BlockStyles:
     """Custom styles defined locally and used only for this block"""
@@ -18,59 +17,42 @@ class BlockStyles:
     link_style = s.text.colors.blue + s.text.decors.underline_text
 
     side_padding = ns("padding: 10pt 36pt;")
+    
+    border = s.container.borders.color(s.text.colors.black) + s.container.borders.solid_border + s.container.borders.size("2px")
 bs = BlockStyles
 
 
-def html_block():
-    html = ""
-
+def build():
     # Section Header: Text Generation
-    html += st_write(bs.blue_title, "Text Generation", toc_lvl=TOC("2"), tag=t.div)
-    html += st_space(size=3)
+    st_write(bs.blue_title, "Text Generation", toc_lvl="2", tag=t.div)
+    st_space(size=3)
 
     # Image Block
-    html += st_list(
-        list_type=l.unordered,
-        li_style=s.center_txt,
-        block_list=[
-            st_image(uri="gpt_text_generation_01.png", link="https://chat.openai.com"),
-        ]
-    )
-
-    html += st_space(size=10)
+    with st_list(lt.unordered, li_style=s.center_txt) as l:
+        with l.item(): st_image(uri="gpt_text_generation_01.png", link="https://chat.openai.com")
+    st_space(size=10)
 
     # Table: Chat Models and Links
-    html += st_block(s.container.flex.center_align_items, [
-        st_table(
-            cell_styles=sg.create("A1,A3,A5", s.project.colors.orange_02) +\
-                        sg.create("A2,A4", s.project.colors.red_01) +\
-                        sg.create("A1:B5", s.bold + s.LARGE + bs.side_padding + s.center_txt) +\
-                        sg.create("B1:B5", s.Large),
-            block_list=[
-                [
-                    st_write(txt= "OpenAI ChatGPT"),
-                    st_write(txt= "link", link="https://www.datacamp.com/blog/yolo-object-detection-explained"),
-                ],
-                [
-                    st_write(txt= "Microsoft CoPilot"),
-                    st_write(txt= "link", link="https://copilot.microsoft.com"),
-                ],
-                [
-                    st_write(txt= "perplexity.ai"),
-                    st_write(txt= "link", link="http://www.perplexity.ai"),
-                ],
-                [
-                    st_write(txt= "claude.ai"),
-                    st_write(txt= "link", link="https://claude.ai/"),
-                ],
-                [
-                    st_write(txt="Various chat models comparison"),
-                    st_write(txt= "link", link="https://sdk.vercel.ai/"),
-                ]
-            ]
-        )
-    ])
+    with st_grid("1fr auto",
+        cell_styles=sg.create("A1,A3,A5", s.project.colors.orange_02) +\
+                    sg.create("A2,A4", s.project.colors.red_01) +\
+                    sg.create("A1:B5", s.bold + s.LARGE + bs.side_padding + s.center_txt + bs.border) +\
+                    sg.create("B1:B5", s.Large)
+        ) as g:
+        with g.cell(): st_write("OpenAI ChatGPT")
+        with g.cell(): st_write("link", link="https://www.datacamp.com/blog/yolo-object-detection-explained")
+        
+        with g.cell(): st_write("Microsoft CoPilot")
+        with g.cell(): st_write("link", link="https://copilot.microsoft.com")
+        
+        with g.cell(): st_write("perplexity.ai"),
+        with g.cell(): st_write("link", link="http://www.perplexity.ai")
+        
+        with g.cell(): st_write("claude.ai")
+        with g.cell(): st_write("link", link="https://claude.ai/")
+        
+        with g.cell(): st_write("Various chat models comparison")
+        with g.cell(): st_write("link", link="https://sdk.vercel.ai/")
 
-    html += st_space(size=5)
-
-    return html
+        
+    st_space(size=5)

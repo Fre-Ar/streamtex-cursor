@@ -1,11 +1,11 @@
 import streamlit as st
-from streamtex_package.src.streamtex import *
-from project_aiai18h.custom.styles import Styles as s
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
+from streamtex import *
+from custom.styles import Styles as s
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
 
 
-def html_block(
+def build(
     int_google="intelligence_google.png",
     link_1="https://lucid.app/lucidchart/6caf112b-a8f7-4ec5-bdc3-c51e679b4259/edit?page=0&v=94&s=1224",
     int_gpt="intelligence_gpt.png",
@@ -15,18 +15,17 @@ def html_block(
     combined_training="combined_training.png"
 ):
     blue_sub = s.project.titles.subtitle_blue_01
-
-    html = ""    
-    html += st_block(s.text.alignments.center_align,
-            [   
-                st_write(s.project.titles.title_green_01, "Computers are Man-Made", toc_lvl=TOC('2')),
-                st_space(),
-                st_write(blue_sub, "Generic Vision of IT", toc_lvl=TOC('+1')),
-                st_image(uri = int_google, link=link_1),
-                st_write(blue_sub, "Simple Vision of IT With AI", toc_lvl=TOC('+1')),
-                st_image(uri = int_gpt, link=link_2),
-                st_image(uri = vision_training, link=link_3),
-                st_write(blue_sub, "Combined view", toc_lvl=TOC('+1')),
-                st_image(uri = combined_training)
-            ])
-    return html
+    
+    with st_block(s.text.alignments.center_align):
+        st_write(s.project.titles.title_green_01, "Computers are Man-Made", toc_lvl='2')
+        st_space()
+        
+        st_write(blue_sub, "Generic Vision of IT", toc_lvl='+1')
+        st_image(uri=int_google, link=link_1)
+        
+        st_write(blue_sub, "Simple Vision of IT With AI", toc_lvl='+1')
+        st_image(uri=int_gpt, link=link_2)
+        st_image(uri=vision_training, link=link_3)
+        
+        st_write(blue_sub, "Combined view", toc_lvl='+1')
+        st_image(uri=combined_training)

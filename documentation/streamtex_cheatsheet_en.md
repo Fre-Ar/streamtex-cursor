@@ -1,11 +1,11 @@
-# 📚 Streamtex Complete Cheatsheet
+# 📚 StreamTeX Complete Cheatsheet
 
 ## 📥 Essential Imports
 
 ```python
-from streamtex_package.src.streamtex import *
-from streamtex_package.src.streamtex.styles import Style as ns, StyleGrid as sg
-from streamtex_package.src.streamtex.streamtex_enums import Tags as t, ListTypes as l
+from streamtex import *
+from streamtex.styles import Style as ns, StyleGrid as sg
+from streamtex.enums import Tags as t, ListTypes as lt
 ```
 
 ## 🎨 Style Organization
@@ -39,22 +39,18 @@ bs = BlockStyles
 
 ```python
 # Simple block with style
-html += st_block(s.center_txt, [
-    st_write(bs.green_title, "My Title"),
+with st_block(s.center_txt):
+    st_write(bs.green_title, "My Title")
     st_space(size=3)
-])
 
 # Block with list
-html += st_block(s.center_txt, [
-    st_list(
+with st_block(s.center_txt):
+    with st_list(
         list_type=l.ordered,
-        li_style=bs.content,
-        block_list=[
-            st_write(txt="First item"),
-            st_write(txt="Second item")
-        ]
-    )
-])
+        li_style=bs.content) as l:
+        with l.item(): st_write("First item")
+        with l.item(): st_write("Second item")
+
 ```
 
 ### Images and Media
@@ -76,27 +72,34 @@ st_image(s.container.sizes.height_auto, uri="image.png")
 ### Grids and Tables
 
 ```python
-# 3x2 grid
-html += st_grid(3, 2, 
-    cell_styles=bs.border + s.container.paddings.little_padding,
-    block_list=[
-        st_image(uri="image1.png"),
-        st_image(uri="image2.png"),
-        st_image(uri="image3.png")
-    ]
-)
+# 2 equal-width column grid
+with st_grid(
+    cols=2, 
+    cell_styles=bs.border + s.container.paddings.little_padding
+    ) as g:
+    # row 1
+    with g.cell(): st_image(uri="image1.png")
+    with g.cell(): st_image(uri="image2.png")
+    # row 2
+    with g.cell(): st_image(uri="image3.png")
 
-# Table with custom styles
-html += st_table(
+
+# Grid (table) with custom grid styles
+with st_grid(
+    cols=2, 
     cell_styles=sg.create("A1,A3", s.project.colors.orange_02) +
                 sg.create("A2", s.project.colors.red_01) +
-                sg.create("A1:B3", s.bold + s.LARGE),
-    block_list=[
-        ["Title", "Link"],
-        ["Item 1", "link1"],
-        ["Item 2", "link2"]
-    ]
-)
+                sg.create("A1:B3", s.bold + s.LARGE)
+    ) as g:
+    # row 1
+    with g.cell(): st_write("Title")
+    with g.cell(): st_write("Link")
+    # row 2
+    with g.cell(): st_write("Item 1")
+    with g.cell(): st_write("link1")
+    # row 3
+    with g.cell(): st_write("Item 2")
+    with g.cell(): st_write("link2")
 ```
 
 ## 🔗 Links and Navigation
@@ -105,21 +108,21 @@ html += st_table(
 
 ```python
 # Simple link
-st_write(txt="Click here", link="https://example.com")
+st_write("Click here", link="https://example.com")
 
 # Styled link
 link_style = s.text.colors.blue + s.text.decors.underline_text
-st_write(link_style, txt="Styled link", link="https://example.com", no_link_decor=True)
+st_write(link_style, "Styled link", link="https://example.com", no_link_decor=True)
 ```
 
 ### Table of Contents
 
 ```python
 # Top level
-st_write(style, "Section", toc_lvl=TOC("1"))
+st_write(style, "Section", toc_lvl="1")
 
 # Sub-level
-st_write(style, "Subsection", toc_lvl=TOC("+1"))
+st_write(style, "Subsection", toc_lvl="+1")
 ```
 
 ## 🎯 Predefined Styles
@@ -197,91 +200,72 @@ s.container.borders.size("2px")
 ### Docs Page
 
 ```python
-def html_block():
-    html = ""
-    html += st_block(bs.center_txt, [
-        st_write(bs.green_title, "Documentation"),
-        st_space(size=3),
-        st_list(l.ordered, bs.content, [
-            "First point",
-            "Second point"
-        ])
-    ])
-    return html
+def build():
+    with st_block(bs.center_txt):
+        st_write(bs.green_title, "Documentation")
+        st_space(size=3)
+        with st_list(l.ordered, bs.content) as l:
+            with l.item(): st_write("First point")
+            with l.item(): st_write("Second point")
 ```
 
 ### Showcase with Grid
 
 ```python
-def html_block():
-    html = ""
-    ### 3 rows, 2 columns grid
-    html += st_grid(3, 2, 
-        cell_styles=bs.border,
-        block_list=[
-            st_image(uri="image1.png"),
-            st_image(uri="image2.png"),
-            st_write(bs.content, "Description")
-        ]
-    )
-    return html
+def build():
+    ### 2 columns grid
+    st_grid(
+        cols=2, 
+        cell_styles=bs.border) as g:
+        with g.cell(): st_image(uri="image1.png")
+        with g.cell(): st_image(uri="image2.png")
+        with g.cell(): st_write(bs.content, "Description")
 ```
 
 ### Full Page Example
 
 ```python
-def html_block():
-    html = ""
-
+def build():
     # Header with title
-    html += st_block(s.center_txt + s.LARGE + s.bold, [
-        st_write(s.project.colors.blue_01 + s.huge, "Main Title", toc_lvl=TOC("1")),
-        st_space(size=2),
-        st_write(s.project.colors.orange_01, "Subtitle", toc_lvl=TOC("+1")),
+    with st_block(s.center_txt + s.LARGE + s.bold):
+        st_write(s.project.colors.blue_01 + s.huge, "Main Title", toc_lvl="1")
+        st_space(size=2)
+        st_write(s.project.colors.orange_01, "Subtitle", toc_lvl="+1")
         st_space(size=3)
-    ])
 
     # Main content
-    html += st_block(s.center_txt, [
-        st_list(
+    with st_block(s.center_txt):
+        with st_list(
             list_type=l.ordered,
-            li_style=bs.content,
-            block_list=[
-                st_write(txt="Section 1"),
-                st_write(txt="Section 2"),
-                st_write(txt="Section 3")
-            ]
-        )
-    ])
+            li_style=bs.content) as l:
+            with l.item(): st_write("Section 1")
+            with l.item(): st_write("Section 2")
+            with l.item(): st_write("Section 3")
 
     # Image grid
-    html += st_grid(2, 2,
-        cell_styles=bs.border + s.container.paddings.little_padding,
-        block_list=[
-            st_image(uri="image1.png"),
-            st_image(uri="image2.png"),
-            st_write(bs.content, "Description 1"),
-            st_write(bs.content, "Description 2")
-        ]
-    )
+    st_grid(
+        cols=2,
+        cell_styles=bs.border + s.container.paddings.little_padding) as g:
+            with g.cell(): st_image(uri="image1.png")
+            with g.cell(): st_image(uri="image2.png")
+            with g.cell(): st_write(bs.content, "Description 1")
+            with g.cell(): st_write(bs.content, "Description 2")
 
     # Links and references
-    html += st_block(s.center_txt + s.Large, [
-        st_write(bs.link_style, txt="Link 1", link="https://example1.com"),
-        st_space(size=1),
-        st_write(bs.link_style, txt="Link 2", link="https://example2.com")
-    ])
+    with st_block(s.center_txt + s.Large):
+        st_write(bs.link_style, "Link 1", link="https://example1.com")
+        st_space(size=1)
+        st_write(bs.link_style, "Link 2", link="https://example2.com")
 
     return html
 ```
 
 ## 📌 Important Notes
 
-1. Always initialize HTML with `html = ""`
-2. Use style classes to organize code
-3. Combine styles with the `+` operator
-4. Use `st_space()` to manage spacing
-5. Keep a proper heading hierarchy for the table of contents
+1. Use style classes to organize code
+2. Combine styles with the `+` operator
+3. Use `st_space()` to manage spacing
+4. Keep a proper heading hierarchy for the table of contents
 
 ## 🔍 Tips and Best Practices
 
