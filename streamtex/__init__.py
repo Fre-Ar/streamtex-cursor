@@ -13,6 +13,7 @@ from .list import st_list
 from .overlay import st_overlay
 from .toc import reset_toc_registry, toc_entries, TOCConfig
 from .enums import Tags
+from .utils import inject_link_preview_scaffold
 
 import importlib.resources as resources
 
@@ -25,6 +26,9 @@ def st_book(module_list, toc_config: TOCConfig = None, *args, **kwargs):
 
     # Load default CSS styles
     load_css("default.css")
+    
+    # Ensure the hover card is ready before any content is rendered.
+    inject_link_preview_scaffold()
     
     # Add zoom options to sidebar
     add_zoom_options()

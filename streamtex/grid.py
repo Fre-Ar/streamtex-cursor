@@ -79,19 +79,25 @@ def st_grid(
     cell_styles: CELL_STYLES_TYPE = StreamTeX_Styles.none,
 ):
     """
-    CSS Grid Layout.
+    A context manager representing a grid layout with customizable styles for the grid and individual cells.
+
+    :param cols: The column layout, as either an int, or a CSS grid-template-columns string.
+                    Examples: 
+                    - 2 (2 equal cols)
+                    - "1fr 1fr 1fr" (3 equal cols)
+                    - "auto 1fr" (First col fits content, second takes rest)
+                    - "200px 1fr 200px" (Fixed sidebars)
+                    - "repeat(auto-fill, minmax(200px, 1fr))" (Responsive card grid)
+    :param grid_style: A `Style` object applied to the entire grid. Defaults to `StreamTeX_Styles.none`.
+    :param cell_styles: Styles for individual cells. Can be:
+        - A `StyleGrid` object.
+        - A matrix (list of lists) of `Style` objects.
+        - A flat list of `Style` objects.
+        - A single `Style` applied to all cells.
     
-    Args:
-        cols (str | int): The column layout, as either an int, or a CSS grid-template-columns string.
-                        Examples: 
-                        - 2 (2 equal cols)
-                        - "1fr 1fr 1fr" (3 equal cols)
-                        - "auto 1fr" (First col fits content, second takes rest)
-                        - "200px 1fr 200px" (Fixed sidebars)
-                        - "repeat(auto-fill, minmax(200px, 1fr))" (Responsive card grid)
-        grid_style (Style): Style wrapper for the whole grid.
-        cell_styles: Style(s) for individual cells. Can be Single, List, Matrix, or StyleGrid.
-        
+    ## Notes: 
+    - Cells are filled from top to bottom, left to right.
+    
     ## Usage Examples:
         ```
         with st_grid(2) as g:

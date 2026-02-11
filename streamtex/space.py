@@ -1,59 +1,7 @@
 import streamlit as st
-from streamlit.components.v2 import component
-from .styles import Style, StreamTeX_Styles
-from .enums import Tag, Tags
-from .utils import contain_link, generate_key, strip_html
 from typing import Literal
 
-HTML_V = """
-    <div style="padding-top: 0em;"></div>
-"""
-
-JS_V = """
-    export default function(component) {
-        const { parentElement, data } = component;
-        
-        // 1. Select container
-        let element = parentElement.querySelector('div');
-        
-        // 2. Set Size
-        element.style.paddingTop = data.size;
-       
-    }
-"""
-
-HTML_H = """
-    <span style="padding-left: 0em;"></span>
-"""
-
-JS_H = """
-    export default function(component) {
-        const { parentElement, data } = component;
-        
-        // 1. Select container
-        let element = parentElement.querySelector('span');
-        
-        // 2. Set Size
-        element.style.paddingLeft = data.size;
-       
-    }
-"""
-
-space_component_v = component(
-    "st_space_v",
-    html=HTML_V,
-    js=JS_V,
-    isolate_styles=False
-)  
-
-space_component_h = component(
-    "st_space_h",
-    html=HTML_H,
-    js=JS_H,
-    isolate_styles=False
-) 
-
-def st_space(direction: Literal["v", "h"] = "v", size="1em"):
+def st_space(direction: Literal["v", "h"] = "v", size="1em") -> str:
     """
     Generates an HTML tag to create vertical or horizontal spacing.
 
@@ -67,22 +15,16 @@ def st_space(direction: Literal["v", "h"] = "v", size="1em"):
     # Convert integer size to em-based string
     if type(size) is int:
         size = str(size) + "em"
-    
-    # Use appropriate component based on orientation
+
+    # Return appropriate HTML based on orientation
     if direction == "v":
         # Vertical space with padding-top
-        result = space_component_v(
-            data = {"size": size},
-            key = generate_key("space_v")
-        )
+        space_tag = f"""<div style="padding-top: {size};"></div>"""
     else:
         # Horizontal space with padding-left
-        result = space_component_h(
-            data = {"size": size},
-            key = generate_key("space_h")
-        )
-        
-    return result
+        space_tag = f"""<span style="padding-left: {size};"></span>"""
+    
+    st.html(space_tag)
 
 def st_br():
    

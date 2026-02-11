@@ -100,7 +100,29 @@ def st_list(
     li_style: Style = s.none
 ):
     """
-    Context Manager for Lists.
+    A context manager representing a list (ordered or unordered) with optional styles and support for nested lists.
+
+    :param list_type: The type of list, either ordered (`<ol>`) or unordered (`<ul>`). Defaults to unordered.
+    :param l_style: A `Style` object for the entire list. Supports custom list-level styles for `ListStyle`.
+    :param li_style: A `Style` object for individual list items. Defaults to `StreamTeX_Styles.none`.
+
+    Notes:
+    - Supports nested lists recursively, with the nesting level affecting the style if `l_style` is a `ListStyle`.
+    
+    ## Syntax Example:
+    ```
+    with st_list(
+        list_type=lt.unordered,
+        l_style=s.none,
+        li_style=bs.list_item_style
+        ) as l:
+        with l.item(): st_write("List Item 1")
+        with l.item(): 
+            st_write("List Item 2")
+            with st_list() as l2:
+                with l2.item(): st_write("Nested Item 1")
+                with l2.item(): st_write("Nested Item 2")
+    ```
     """
     current_level = _current_list_level.get()
     next_level = current_level + 1

@@ -50,7 +50,7 @@ def st_block(style: Style = StreamTeX_Styles.none):
 def st_span(style: Style = StreamTeX_Styles.none):
     """
     A Context Manager that wraps content within a styled container.
-    Its contents are inserted in a line.
+    Its contents are inserted in the same line.
     """
     
     # 1. Generate a unique ID to scope the CSS to this specific block

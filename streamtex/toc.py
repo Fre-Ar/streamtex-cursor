@@ -125,4 +125,5 @@ def toc_entries():
     return toc.get_entries()
 
 def get_key_anchor(title: str):
+    '''Returns a key anchor version of the title text.'''
     return TOCRegistry.get_key_anchor(title)

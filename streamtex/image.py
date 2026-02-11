@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from .styles import Style, StreamTeX_Styles
-from .utils import __is_url, __is_absolute_path, __is_relative_path, __get_mime_type, __get_base64_encoded_image
+from .utils import __is_url, __is_absolute_path, __is_relative_path, __get_mime_type, __get_base64_encoded_image, contain_link
 
 def st_image(
     style: Style = StreamTeX_Styles.none,
@@ -10,7 +10,26 @@ def st_image(
     link:str="", hover:bool=True
 ):
     """
-    Renders an image using st.html directly.
+    Generates an HTML `img` tag based on the image URI, with optional styles, link wrapping, and hover effects.
+
+    :param style: A `Style` object defining CSS styles to apply to the image. Defaults to `StreamTeX_Styles.none`.
+    :param width: The width of the image. Can be a string (e.g., "50%") or an integer (e.g., 100). Defaults to "100%".
+    :param height: The height of the image. Can be a string (e.g., "300px") or an integer (e.g., 300). Defaults to "100%".
+    :param uri: The image URI. Can be:
+        - A URL (e.g., "https://example.com/image.png").
+        - An absolute path (e.g., "C:User/images/image.png").
+        - A relative path (e.g., "/images/image.png". This can start with '.', '..', '/' and backslash).
+        - A static path (e.g., images/image.png).
+    :param alt: The alternative text for the image, used for accessibility or when the image cannot be displayed.
+    :param link: An optional hyperlink to wrap around the image. Defaults to an empty string (no link).
+    :param hover: If True, enables hover functionality for the image link. Defaults to True.
+    :return: A string containing the HTML `img` tag, optionally wrapped in a hyperlink.
+
+    Notes:
+    - URLs are used directly as the `src` attribute.
+    - Local files are base64 encoded for compatibility with browsers that don't allow local file paths in HTML.
+    - If the URI cannot be resolved or is unsupported, the `src` attribute is left empty.
+    - The function wraps the image tag in a link if `link` is provided, using the `contain_link` function.
     """
     # 1. Convert integer sizes to pixel-based strings
     if isinstance(width, int):
@@ -29,12 +48,9 @@ def st_image(
 
     # 4. Construct the HTML
     html_content = f'<img src="{img_src}" alt="{alt}" style="{css_style}">'
-
+    
     # 5. Handle Link Wrapping
-    if link and link != "None":
-        # Wrap the image in an anchor tag if a link is provided
-        # We ensure the anchor is inline-block so it wraps the image tightly
-        html_content = f'<a href="{link}">{html_content}</a>'
+    html_content = contain_link(html_content, link, False, hover)
 
     # 6. Render
     st.html(html_content)
